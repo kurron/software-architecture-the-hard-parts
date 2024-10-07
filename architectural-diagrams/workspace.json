@@ -1,0 +1,530 @@
+{
+  "configuration" : { },
+  "description" : "Epic Saga",
+  "documentation" : {
+    "decisions" : [ {
+      "content" : "# 1. Record architecture decisions\n\n## Status\nAccepted\n\n## Context\nWe will record the architectural decisions made on this project.\n\n## Decision\nWe will use Architecture Decision Records, as described by Michael Nygard in this article: [Documenting Architecture Decisions](http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-decisions)\n\n## Consequences\nSee Michael Nygard's article, linked above.",
+      "date" : "2024-10-07T21:30:27Z",
+      "format" : "Markdown",
+      "id" : "1",
+      "status" : "Accepted",
+      "title" : "Record architecture decisions"
+    }, {
+      "content" : "# 1. Use Mark Richards' \"arrow\" Notation\n\n## Status\nAccepted\n\n## Context\nLooking at a static diagram, especially when printed on a black and white printer, it can be difficult to quickly grasp how each component interacts with others. In particular, the use of arrows and lines are often ambiguous and/or misleading, decreasing the understandability of the diagram.\n\n## Decision\n[Mark Richards](https://developertoarchitect.com/lessons/) has a simple set of conventions when it comes to lines and arrows that we will incorporate into our C4 views: [Lesson 94 - Guidelines for Architecture Diagrams](https://developertoarchitect.com/lessons/lesson94.html) and [Lesson 95 - Guidelines for Architecture Diagrams Revisited](https://developertoarchitect.com/lessons/lesson95.html).\n\n## Consequences\nBy taking using a simple convention when it comes to line and arrow use, people should more quickly understand what is being diagrammed with less ambiguity.",
+      "date" : "2024-10-07T21:30:27Z",
+      "format" : "Markdown",
+      "id" : "10",
+      "status" : "Accepted",
+      "title" : "Use Mark Richards' \"arrow\" Notation"
+    }, {
+      "content" : "# 1. Use The Spring Modulith Framework\n\n## Status\nAccepted\n\n## Context\nOne of the goals of this project is to exercise the notion of a \"modular monolith\", seeing how it behaves in a working system. \n\n## Decision\n[Spring Modulish](https://spring.io/projects/spring-modulith) is a new framework that provides guide rails and opinions on how JVM applications can have loosely coupled components and retain the benefits of a monolith. Let's see how much of the heavy lifting it can do for us.\n\n## Consequences\nBy using a framework, we cut down on the work needed to keep components decoupled. Using Java 9 module system looks like a ton of work and using a message broker, like RabbitMQ, introduces probably just as much work. Since we're already using Spring for other parts of the solution, it makes sense to use it for modularity concerns as well.",
+      "date" : "2024-10-07T21:30:27Z",
+      "format" : "Markdown",
+      "id" : "11",
+      "status" : "Accepted",
+      "title" : "Use The Spring Modulith Framework"
+    }, {
+      "content" : "# 1. Build Container Images Using Buildpacks\n\n## Status\nAccepted\n\n## Context\nWriting Docker files by hand is cumbersome and inefficient. There are better ways.\n\n## Decision\nWe will use  [Buildpacks](https://buildpacks.io/) to assemble container images for the services to be deployed to Kubernetes.\n\n## Consequences\nNo more debugging Dockerfiles or large images. Cloud Native Buildpacks does much of the heavy lifting, generating optimized images that can be used with any container runtime.",
+      "date" : "2024-10-07T21:30:27Z",
+      "format" : "Markdown",
+      "id" : "2",
+      "status" : "Accepted",
+      "title" : "Build Container Images Using Buildpacks"
+    }, {
+      "content" : "# 1. Use Kotlin For Production Code\n\n## Status\nAccepted\n\n## Context\nJava 17 has improved the programmer experience but Kotlin, in our opinion, provides a better one.\n\n## Decision\nWe will use [Kotlin](https://kotlinlang.org/) to develop the production modules. Test will use Java, primarily due to some complexity in getting Cucumber and Kotlin to play nicely together.\n\n## Consequences\nKotlin has many features baked into the language that require extra libraries to accomplish in Java, e.g. Lombok. Fewer dependencies means fewer upgrade headaches in the future.",
+      "date" : "2024-10-07T21:30:27Z",
+      "format" : "Markdown",
+      "id" : "3",
+      "status" : "Accepted",
+      "title" : "Use Kotlin For Production Code"
+    }, {
+      "content" : "# 1. Use Spring Pulsar\n\n## Status\nRejected\n\n## Context\nWorking with the Pulsar Java library requires boilerplate code and an understanding of numerous options. A simpler programming model would improve the developer experience.\n\n## Decision\n~~We will use the [Spring for Apache Pulsar](https://github.com/spring-projects-experimental/spring-pulsar) project to develop the gateways to Pulsar.~~ Spring Integration currently integrates only with RabbitMQ and we want to leverage it to keep the code simple. Although it should be possible to host Pulsar in our Kubernetes cluster, we were unable to get it to come all the way up.  For that reason, we'll be using RabbitMQ as our message broker.\n\n## Consequences\nThe project is in its infancy but seems to have progressed nicely, supporting the features that this project needs. As new milestones come up, we will upgrade as well as report any bugs found during development.",
+      "date" : "2024-10-07T21:30:27Z",
+      "format" : "Markdown",
+      "id" : "4",
+      "status" : "Rejected",
+      "title" : "Use Spring Pulsar"
+    }, {
+      "content" : "# 1. Use Spring Integration\n\n## Status\nRejected\n\n## Context\nThe solution is centered around messaging and its accepted patterns, as described in [Enterprise Integration Patterns](https://www.enterpriseintegrationpatterns.com/). Implementing those patterns should not be a concern of the project, allowing the team to focus on business value.\n\n## Decision\nWe will not use [Spring Integration](https://spring.io/projects/spring-integration) be our implementation of those patterns. While we anticipate using some of the patterns, we want to keep things simple until something more complex is needed.\n\n## Consequences\nWe'll either have to hand code messaging patterns or we'll have to look into other frameworks, e.g. [Spring AMQP](https://spring.io/projects/spring-amqp)",
+      "date" : "2024-10-07T21:30:27Z",
+      "format" : "Markdown",
+      "id" : "5",
+      "status" : "Rejected",
+      "title" : "Use Spring Integration"
+    }, {
+      "content" : "# 1. Use Explicit Contexts\n\n## Status\nAccepted\n\n## Context\nMichael Nygard has a very interesting idea that should allow system to evolve over time. From his book [Release It!]():\n\n>Suppose your service receives this fragment of JSON inside a request: `{\"item\": \"029292934\"}`\n>\n>How much do we know about the item? Is that string the item itself? Or is it an item identifier? Maybe the field would be better named “itemID.” Supposing that it is an identifier, our service can’t do very much with it. In fact, only four things are possible:\n>\n>1. Pass it through as a token to other services. (This includes returning it to the same caller in the future.)\n>2. Look it up by calling another service.\n>3. Look it up in our own database.\n>4. Discard it.\n>\n>In the first case, we’re just using the “itemID” as a token. We don’t care about the internal structure. In this case it would be a mistake to convert it from string to numeric. We’d be imposing a restriction that doesn’t add any value and will probably need to be changed—with huge disruption—in the future.\n>\n>In the second and third cases, we’re using the “itemID” as something we can resolve to get more information. But there’s a serious problem here. The bare string shown earlier doesn’t tell us who has the authoritative information. If the answer isn’t in our own database, we need to call another service. Which service?\n>\n>This issue is so pervasive that it does not even look like a problem at first. In order to get item information, your service must already know who to call! That’s an implicit dependency.\n>\n>That implicit dependency limits you to working with just the one service provider. If you need to support items from two different “universes,” it’s going to be very disruptive.\n>\n>Suppose instead the initial fragment of JSON looked like this: `{\"itemID\": \"https://example.com/policies/029292934\"}`\n>\n>This URL still works if we just want to use it as an opaque token to pass forward. From one perspective, it’s still just a Unicode string.\n>\n>This URL also still works if we need to resolve it to get more information. But now our service does not have to bake in knowledge of the solitary authority. We can support more than one of them.\n>\n>By the way, using a full URL also makes integration testing easier. We no longer need “test” versions of the other services. We can supply our own test harnesses and use URLs to those instead of the production authorities.\n>\n>This example is all in the context of interservice communication. But making implicit context into explicit context has big benefits inside services as well. If you’ve worked on a Ruby on Rails system, you might have run into difficulty when trying to use multiple relational databases from a single service. That’s because ActiveRecord uses an implicit database connection. This is convenient when there’s just one database, but it becomes a hindrance when you need more than one.\n>\n>Global state is the most insidious form of implicit context. That include configuration parameters. These will slow you down when you need to go from “one” to “more than one” of a collaboration.\n\n## Decision\nWhen possible, we will use a URI as the primary key for objects. Depending on the system in question, it may not be an easily resolvable location and may have to be deconstructed a bit before getting to something readable. For example: `mongodb:read-only-user@mongodb.example.com:5762/some-dataset?_id=9876` probably won't have an available protocol handler, so one must be written.  \n\n## Consequences\nIf we can use stable names for the authority portion of the URI, we should be able to move services around and still have systems find the data they need. One element we have to be keenly aware of is that changing the scheme portion later will be very difficult, if not impossible. If available, an HTTP or GraphQL URI should be preferred over direct database or coordinates. In practical terms, this means that we still use database generated primary keys but return a URL as the ID of the asset.  For example, document `1234` would be exposed to the caller as `http://alpha.test.example.com/user/1234`. If that URI is ever \"tugged\" on, hyperlinks are provided to other possible operations on the resource.",
+      "date" : "2024-10-07T21:30:27Z",
+      "format" : "Markdown",
+      "id" : "6",
+      "status" : "Accepted",
+      "title" : "Use Explicit Contexts"
+    }, {
+      "content" : "# 1. Use Message Routing\n\n## Status\nAccepted\n\n## Context\nIn a message centric solution, routing of messages to the correct handler is both crucial and complex. Over time, those routing rules will change and we want a mechanism that allows for easy evolution of the system.\n\n## Decision\nLeverage the [Message Router](https://www.enterpriseintegrationpatterns.com/patterns/messaging/MessageRouter.html) pattern both at the external (AMQP) and internal (Spring Integration) messaging levels. In particular, messages should provide a `label` field that can be used to make routing decisions based on pattern matching.\n\n## Consequences\nAltering what component handles a particular class of message should be a trivial configuration change, requiring only small code changes.  For example, one day the label `command.character.new` could be routed to a component that handles all character commands but on the next day, that same label could be routed to a component dedicated to handling that command only.  Such flexibility should reduce the maintenance cost of the system. AMQP specifies the `Topic Exchange` and Spring Integration the `HeaderValueRouter` for just this purpose.",
+      "date" : "2024-10-07T21:30:27Z",
+      "format" : "Markdown",
+      "id" : "7",
+      "status" : "Accepted",
+      "title" : "Use Message Routing"
+    }, {
+      "content" : "# 1. Use Spring AMQP\n\n## Status\nRejected\n\n## Context\nIn a message centric solution, routing of messages to the correct handler is both crucial and complex. Over time, those routing rules will change and we want a mechanism that allows for easy evolution of the system.\n\n## Decision\nLeveraging the [Spring AMQP](https://spring.io/projects/spring-amqp) framework to manage the routing of messages in the system does not make sense in a [Spring Modulith](https://spring.io/projects/spring-modulith) environment.\n\n## Consequences\nBy taking using a framework that uses in-process messages we can avoid some of the complexity associated with using messages for modularity.",
+      "date" : "2024-10-07T21:30:27Z",
+      "format" : "Markdown",
+      "id" : "8",
+      "status" : "Rejected",
+      "title" : "Use Spring AMQP"
+    }, {
+      "content" : "# 1. Use Spring HATEAOS\n\n## Status\nAccepted\n\n## Context\nHypermedia has existed for quite some time and is potentially useful on both the client and server side. The key notion is that the response payload contains links to allowable operations, guiding the UI through the workflow.  Although we currently do not have plans to drive the UI, we do support the notion of an explicit context for all of our identifiers. Hypermedia and the HAL format supports that.\n\n## Decision\nLeverage the [Spring HATEOAS](https://spring.io/projects/spring-hateoas) framework to manage the hyperlinks provided in API responses. The framework simplifies the management of links, including understanding location of the application sitting behind an API Gateway or proxy.  Being a Spring project, it understands the programming model used, greatly reducing the amount of configuration and code required to support hypermedia.\n\n## Consequences\nBy taking advantage of an exiting framework, we can use the linking concepts in the HAL format to ensure we're always using identifiers in an explicit context. In theory, the UI could be modified to take advantage of hypermedia to drive the workflow of operations. Using HAL, however, might prove to be a complication if we decide to introduce GraphQL. It is unclear how HAL can be generated when combining results from different services. ",
+      "date" : "2024-10-07T21:30:27Z",
+      "format" : "Markdown",
+      "id" : "9",
+      "status" : "Accepted",
+      "title" : "Use Spring HATEAOS"
+    } ],
+    "sections" : [ {
+      "content" : "== Context\nGURPS Online is a new system, providing an online version of the traditional, paper based http://www.sjgames.com/gurps/resources/CampaignPlanning.pdf[campaign] and http://www.sjgames.com/gurps/resources/CharacterSheet.pdf[character] sheets. GURPS Online is intended to ease the creation of worlds, campaigns and characters, not run them.  Games will continue to be played by friends sitting around the kitchen table using the generated assets. GURPS Online is a departure from existing products the company sells so there is no integration with existing systems. It stands alone.\n\nThroughout the document, we reference a few people that help to describe the types of users of the system. First, we have Gary who is the Game Master interested in creating worlds and campaigns for his friends. Next, we have Penny who is a Player interested in creating characters compatible with Gary's campaigns. Finally, we have Adam who administrates the system, typically installing new assets and managing users.  The system is web based but does allow viewing of assets on mobile devices. Editing on mobile, however, is not supported.\n\nGary has the responsibility of creating an entire world from his imagination as well as creating a story for characters to experience in that world. He is tasked with making several decisions, including:\n\n* the genre of the campaign, e.g. science fiction\n* the campaign style, e.g. realistic, cinematic\n* planes of existence\n* society type\n* technology level\n\nPenny has to make choices when creating her character, including:\n\n* race\n* skills\n* advantages\n* attribute point allocation\n\nAdam, using his bulk operation tool, is adding new assets to the system, including:\n\n* armor\n* weapons\n* skills\n* advantages\n\nWARNING: figure out how to embed the context diagram",
+      "filename" : "01-context.adoc",
+      "format" : "AsciiDoc",
+      "order" : 1,
+      "title" : ""
+    }, {
+      "content" : "== Functional Overview\n. Highlight and summarize major functions of the software\n. Is it clear what the system actually does?\n. Is it clear which features, functions, use cases, user stories, etc are significant to the architecture and why?\n. Is it clear who the important users are (roles, actors, personas, etc) and how the system caters for their needs?\n. Is it clear that the above has been used to shape and define the architecture?\n. Is it clear what the system does from a process perspective?\n. What are the major processes and flows of information through the system?\n. Feel free to reference existing documentation\n. The goal is to provide an *overview*\n. Sequence diagram when discussing automated business processes is useful\n. Technical and non-technical people, both inside and outside the immediate development team\n\nThe goal of the system is make it easier for people who want to play GURPS to find worlds and campaigns of interest to them. To that end, everything in the system is searchable and has infinite lifetime. Players won't have to worry about a campaign disappearing on them because the author decided to delete one of his published worlds.\n\n=== Worlds and Campaigns\nGary decides one day that he wants to create a world and a campaign within that world. Using GURPS Online, he'll be guided through a series of screens that helps with that process, including the selection of technology levels, government structures and geography.  He'll have access to a catalog of weapons, spells, armor and technologies to include in his campaign. These catalogs include content created by other game masters. Gary has the option to publish his works to the community for others to use, if he desires.\n\n=== Characters\nPenny uses the system to search for campaigns that sound interesting to her. She likes to search by genre, such as horror, but also keeps tabs on her favorite campaign creators, getting text and e-mail notification when new works are published. She also uses the system to see if a new group has formed to play any of the campaigns she is watching. Once she has joined a group, she creates a new character based on the world and campaign constraints.  GURPS Online will advise her if any of her existing characters are playable in the campaign, saving her the time to create one. When joining a new game, Penny will familiarize herself with the world by download the PDFs of relevant assets. She doesn't get access to the game master's notes of course, as that would spoil the fun. Only he can see his notes.\n\n=== Message Board\nWhile GURPS Online does not run games, we do provide a very basic message board where the community can find when a new game is starting up. We are not in the business of managing online abuse, the boards are very limited, only providing just enough information for players to decide if they want to reach out to game master for more details.\n\n=== System Housekeeping\nAdam is tasked with administering the system, including importing new assets, dealing with conduct violations and removing assets violating community policies. Adam sometimes has to go in and remove postings that violate the terms of service.\n\n=== Obtaining Assets\nGURPS Online uses https://ipfs.tech/[IPFS] to distribute assets, avoiding any content filtering that some governments do. We realize that we're only facilitating playing a game but we feel strongly enough that everyone should have access to fun that we're willing to use a relatively new technology to get the assets into the hands of players, regardless of politics.\n\n",
+      "filename" : "02-functional-overview.adoc",
+      "format" : "AsciiDoc",
+      "order" : 2,
+      "title" : ""
+    }, {
+      "content" : "== Quality Attributes\n. Summarize key quality attributes\n. Performance (e.g. latency and throughput)\n. Scalability (e.g. data and traffic volumes)\n. Availability (e.g. uptime, downtime, scheduled maintenance, 24x7, 99.9%, etc)\n. Security (e.g. authentication, authorization, data confidentiality, etc)\n. Extensibility\n. Auditing\n. Monitoring and management\n. Reliability\n. Failover/disaster recovery targets (e.g. manual vs automatic, how long will it take?)\n. Business continuity\n. Interoperability\n. Legal, compliance and regulatory requirements (e.g. data protection act)\n. I18n and L10n\n. Accessibility\n. Usability\n. Use SMART (specific, measurable, achievable, relevant and timely) attributes\n. Technical people only",
+      "filename" : "03-quality-attributes.adoc",
+      "format" : "AsciiDoc",
+      "order" : 3,
+      "title" : ""
+    }, {
+      "content" : "== Constraints\n. Summarize the constraints your are working in and some of the decisions that have been made for you\n. Time, budget and resources\n. Approved technology lists and technology constraints\n. Target deployment platform\n. Existing systems and integration standards\n. Local standards (e.g. development, coding, etc)\n. Public standards (e.g. HTTP, SOAP, XML, XML Schema, WSDL, etc)\n. Standard protocols\n. Standard message formats\n. Size of software development team\n. Skill profile of the development team\n. Nature of the software being build (et, tactical or strategic)\n. Political constraints\n. Use of internal intellectual property\n. Technical and non-technical people\n\nWe're a small company with a limited development budget but we do expect that system to become increasingly popular. GURPS Online is built using as a loosely coupled monolith, meaning that there is a single code base but it is structured in such a way that parts of it can be moved out into its own system as needed. This keeps the initial development costs down while providing a path in the future for growth.  Our developers are skilled JVM programmers but we don't have the time or budget to create any bespoke frameworks for this solution. For that reason, the system is built using frameworks plucked from the Spring ecosystem. Further, we're using Kotlin running on contemporary JVM releases, giving us further productivity gains.\n",
+      "filename" : "04-constraints.adoc",
+      "format" : "AsciiDoc",
+      "order" : 4,
+      "title" : ""
+    }, {
+      "content" : "== Principles\n. Make it explicit what principles are being followed\n. Supply existing references, if they exist\n. Architectural layering strategy\n. No business logic in views\n. No database access in views\n. Use of interfaces\n. Always use an ORM\n. Dependency injection\n. The Hollywood principle\n. High cohesion, low coupling\n. Follow SOLID\n. DRY\n. Ensure all components are stateless (e.g. to ease scaling)\n. Prefer a rich domain model\n. Prefer an anemic domain model\n. Prefer stored procedures\n. Avoid stored procedures\n. Don't reinvent the wheel\n. Approaches to error handling, logging, etc\n. Buy rather than build\n. Technical people only\n\n=== Package By Feature\nThe desire to more easily extract features into separate services is a priority. Traditional layering strategies, such a Hexagonal Architecture, will not help in this regard. Instead, we use a packaging concept described in https://youtu.be/5OjqD-ow8GE[Modular Monoliths] and https://youtu.be/48C-RsEu0BQ[Creating a Loosely Coupled Monolith]. The main idea is that each capability of the system is partitioned into its own \"slice\" of the code base. We've taken the approach of using Maven modules as the primary partitioning construct. Unfortunately, Kotlin's `internal` does not work in multi-module Maven projects, so we cannot depend on the compiler in preventing cross-feature coupling. At the persistence layer, we use the same physical database host but give each module its own namespace, preventing modules from directly accessing each other's data. Lastly, we use messaging when interacting with modules, decoupling them in space and time. Only the message broker needs to be available for the system to function.",
+      "filename" : "05-principles.adoc",
+      "format" : "AsciiDoc",
+      "order" : 5,
+      "title" : ""
+    }, {
+      "content" : "== Software Architecture\n* Summarize the software architecture\n* What does the \"big picture\" look like?\n* Is there a clear structure?\n* Is it clear how the system works from the \"30,000 foot view\"?\n* Does it show major containers and technology choices?\n* Does it show major components and their interactions?\n* What are the key internal interfaces? (e.g. web service between web and business tiers)\n* Technical people only",
+      "filename" : "06-software-architecture.adoc",
+      "format" : "AsciiDoc",
+      "order" : 6,
+      "title" : ""
+    }, {
+      "content" : "== External Interfaces\n. What are the key external interfaces?\n.. system-to-system\n.. publicly exposed APIs\n.. exported files\n. Has each interface been thought about from a technical perspective?\n.. what is the technical definition of an interface?\n.. if messaging is being used, which queues and topics are components using to communicate?\n.. what format are the messages (e.g. plain text, Avro, JSON)?\n.. are they synchronous or asynchronous?\n.. are asynchronous messaging links guaranteed?\n.. are subscribers durable where necessary?\n.. can messages be received out of order and is this a problem?\n.. are interfaces idempotent?\n.. is the interface always available or do you need the cache data locally?\n.. how is performance/security/etc catered for?\n. Has each interface been thought about from a non-technical perspective?\n.. who has ownership of the interface?\n.. how often does the interface change and how is versioning handled?\n.. are there service-level agreements in place?\n. A paragraph on each interface covering this topics is sufficient\n. Technical people only",
+      "filename" : "07-external-interfaces.adoc",
+      "format" : "AsciiDoc",
+      "order" : 7,
+      "title" : ""
+    }, {
+      "content" : "== Code\n. Describe implementation details for important/complex parts of the system\n. homegrown frameworks\n. WebMVC frameworks\n. approach to security\n. domain model\n. component frameworks\n. configuration mechanisms\n. architectural layering\n. exceptions and logging\n. how patterns and principals are implemented\n. short description of each element using diagrams as necessary\n. Technical people only",
+      "filename" : "08-code.adoc",
+      "format" : "AsciiDoc",
+      "order" : 8,
+      "title" : ""
+    }, {
+      "content" : "== Data\n. Record anything that is important from the data perspective\n. What does the data model look like?\n. Where is data stored?\n. Who owns the data?\n. How much storage space is needed for the data?\n. Are there any requirements for long term archival?\n. Are there any requirements for log files and audit trails?\n. Are flat files being used for storage?\n. short description of each element using diagrams as necessary\n. Technical people only, including Operations",
+      "filename" : "09-data.adoc",
+      "format" : "AsciiDoc",
+      "order" : 9,
+      "title" : ""
+    }, {
+      "content" : "== Infrastructure Architecture\n. Describe the physical/virtual hardware and networks the software will be deployed to.\n. Is there a clear physical architecture?\n. What hardware does this include across all tiers?\n. Does it cater for redundancy, failover and disaster recovery if applicable?\n. Is it clear how the chosen hardware components have been sized and selected?\n. If multiple servers and sites are used, what are the network links between them?\n. Who is responsible for support and maintenance of the infrastructure?\n. Are there central teams to look after common infrastructure?\n. Who owns the resources?\n. Are there sufficient environments for development, testing, acceptance, pre-production, production?\n. Provide an infrastructure/network diagram with a short narrative\n. Technical people only, including Operations",
+      "filename" : "10-infrastructure-architecture.adoc",
+      "format" : "AsciiDoc",
+      "order" : 10,
+      "title" : ""
+    }, {
+      "content" : "== Deployment\n. Describe the mapping between software (containers) and the infrastructure.\n. How and where is the software installed and configured?\n. Is it clear how the software will be deployed across the infrastructure elements described in the Infrastructure Architecture section?\n. What are the options and have they been documented?\n. Is it understood how memory and CPU will be partitioned between the processes running on a single piece of infrastructure?\n. Are any containers/components running in an active-active, active-passive, hot-standby, cold-standby formation?\n. Has the deployment and rollback strategy been defined?\n. What happens in the event of a software or infrastructure failure?\n. Is it clear how data is replicated across sites?\n. Can use tables to show mapping between containers and infrastructure\n. Can use UML deployment diagrams\n. Can use color coding to designate runtime status (primary vs secondary, etc_",
+      "filename" : "11-deployment.adoc",
+      "format" : "AsciiDoc",
+      "order" : 11,
+      "title" : ""
+    }, {
+      "content" : "== Operation and Support\n. Be explicit about to run, monitor and manage the software\n. Is it clear how the software provides the ability for Operations to monitor and manage the system?\n. Has is this achieved across all tiers of the architecture?\n. How can Operations diagnose problems?\n. Where are errors and information logged?\n. Do configuration changes require a restart?\n. Are there any manual housekeeping tasks that need to be performed on a regular basis?\n. Does old data need to be periodically archived?\n. A simple narrative should suffice here\n. Technical people only, including Operations",
+      "filename" : "12-operation-and-support.adoc",
+      "format" : "AsciiDoc",
+      "order" : 12,
+      "title" : ""
+    }, {
+      "content" : "== Development Environment\n. Summarize how new team members set up a development environment\n. Pre-requisite versions of software needed\n. Links to software downloads\n. Links to virtual machines\n. Environment variables\n. Host name entries\n. IDE configuration\n. Build and test instructions\n. Database population scripts\n. Username, passwords and certificates for connecting to services\n. Links to build servers\n. Technical people only, developers specifically",
+      "filename" : "13-deveopment-environment.adoc",
+      "format" : "AsciiDoc",
+      "order" : 13,
+      "title" : ""
+    }, {
+      "content" : "== Decision Log\n. Capture major decisions that have been made\n. Why did you choose technology/framework X over Y and Z?\n. How did you make the selection? PoC? Product evaluation?\n. Did corporate policy or architecture standards force you to select X?\n. Why did you choose the selected architecture?  What other options did you consider?\n. How do you know that the solution satisfies the major non-functional requirements?\n. Short paragraph describing each decision. Include a date of the decision?\n. Technical people only",
+      "filename" : "14-decision-log.adoc",
+      "format" : "AsciiDoc",
+      "order" : 14,
+      "title" : ""
+    } ]
+  },
+  "id" : 1,
+  "lastModifiedAgent" : "structurizr-ui",
+  "lastModifiedDate" : "2024-10-07T21:30:42Z",
+  "model" : {
+    "people" : [ {
+      "description" : "Purchasing customer",
+      "id" : "1",
+      "location" : "Unspecified",
+      "name" : "Penny",
+      "properties" : {
+        "structurizr.dsl.identifier" : "penny"
+      },
+      "relationships" : [ {
+        "description" : "purchase products",
+        "destinationId" : "7",
+        "id" : "8",
+        "properties" : {
+          "structurizr.dsl.identifier" : "83862559-2fa0-4547-9b65-a34603338d6f"
+        },
+        "sourceId" : "1",
+        "tags" : "Relationship,sync-one-way",
+        "technology" : "JSON over HTTPS"
+      }, {
+        "description" : "purchase products",
+        "destinationId" : "2",
+        "id" : "9",
+        "linkedRelationshipId" : "8",
+        "sourceId" : "1",
+        "technology" : "JSON over HTTPS"
+      } ],
+      "tags" : "Element,Person"
+    } ],
+    "softwareSystems" : [ {
+      "containers" : [ {
+        "description" : "Accepts orders",
+        "documentation" : { },
+        "id" : "3",
+        "name" : "Order Management Service",
+        "properties" : {
+          "structurizr.dsl.identifier" : "orderplacementservice"
+        },
+        "tags" : "Element,Container,tag",
+        "technology" : "Spring Ecosystem"
+      }, {
+        "description" : "Process payments",
+        "documentation" : { },
+        "id" : "4",
+        "name" : "Payment Service",
+        "properties" : {
+          "structurizr.dsl.identifier" : "paymentservice"
+        },
+        "tags" : "Element,Container,tag",
+        "technology" : "Spring Ecosystem"
+      }, {
+        "description" : "Ships orders",
+        "documentation" : { },
+        "id" : "5",
+        "name" : "Fulfillment Service",
+        "properties" : {
+          "structurizr.dsl.identifier" : "fulfillmentservice"
+        },
+        "tags" : "Element,Container,tag",
+        "technology" : "Spring Ecosystem"
+      }, {
+        "description" : "E-mail customers",
+        "documentation" : { },
+        "id" : "6",
+        "name" : "E-mail Service",
+        "properties" : {
+          "structurizr.dsl.identifier" : "emailservice"
+        },
+        "tags" : "Element,Container,tag",
+        "technology" : "Spring Ecosystem"
+      }, {
+        "components" : [ {
+          "description" : "Some service detail",
+          "documentation" : { },
+          "id" : "14",
+          "name" : "Some service detail",
+          "properties" : {
+            "structurizr.dsl.identifier" : "1e802a77-8c38-44ac-a8f7-f47906550f74"
+          },
+          "tags" : "Element,Component",
+          "technology" : "foo,bar"
+        } ],
+        "description" : "Coordinates the workflow",
+        "documentation" : { },
+        "id" : "7",
+        "name" : "Orchestrator",
+        "properties" : {
+          "structurizr.dsl.identifier" : "orchestrator"
+        },
+        "relationships" : [ {
+          "description" : "accept the order",
+          "destinationId" : "3",
+          "id" : "10",
+          "properties" : {
+            "structurizr.dsl.identifier" : "7b97e72f-61c1-4f1c-a452-a4a72e043383"
+          },
+          "sourceId" : "7",
+          "tags" : "Relationship,sync-one-way",
+          "technology" : "JSON over HTTPS"
+        }, {
+          "description" : "process the payment",
+          "destinationId" : "4",
+          "id" : "11",
+          "properties" : {
+            "structurizr.dsl.identifier" : "caef53e3-73e6-4b1f-9482-8d511e1049f3"
+          },
+          "sourceId" : "7",
+          "tags" : "Relationship,sync-one-way",
+          "technology" : "JSON over HTTPS"
+        }, {
+          "description" : "ship the order",
+          "destinationId" : "5",
+          "id" : "12",
+          "properties" : {
+            "structurizr.dsl.identifier" : "23e048d2-8ce0-40f7-a6e6-48e2664b7eb5"
+          },
+          "sourceId" : "7",
+          "tags" : "Relationship,sync-one-way",
+          "technology" : "JSON over HTTPS"
+        }, {
+          "description" : "send the order status",
+          "destinationId" : "6",
+          "id" : "13",
+          "properties" : {
+            "structurizr.dsl.identifier" : "134f918f-30ee-44a1-8196-12c8cbc6384a"
+          },
+          "sourceId" : "7",
+          "tags" : "Relationship,sync-one-way",
+          "technology" : "JSON over HTTPS"
+        } ],
+        "tags" : "Element,Container,tag",
+        "technology" : "Spring Ecosystem"
+      } ],
+      "description" : "Online Buy More storefront",
+      "documentation" : { },
+      "id" : "2",
+      "location" : "Unspecified",
+      "name" : "Buy More",
+      "properties" : {
+        "structurizr.dsl.identifier" : "buymore"
+      },
+      "tags" : "Element,Software System"
+    } ]
+  },
+  "name" : "Software Architecture: The Hard Parts (Epic Saga)",
+  "properties" : {
+    "structurizr.dsl" : "IyBodHRwczovL2dpdGh1Yi5jb20vc3RydWN0dXJpenIvZHNsL2Jsb2IvbWFzdGVyL2RvY3MvbGFuZ3VhZ2UtcmVmZXJlbmNlLm1kCgojKFBlcnNvbnxTb2Z0d2FyZVN5c3RlbXxDb250YWluZXJ8Q29tcG9uZW50fERlcGxveW1lbnROb2RlfEluZnJhc3RydWN0dXJlTm9kZXxTb2Z0d2FyZVN5c3RlbUluc3RhbmNlfENvbnRhaW5lckluc3RhbmNlfEN1c3RvbSkKCiFjb25zdCBDT0RFX05BTUUgIlByb2plY3QgQWxwaGEiCiFjb25zdCBHUk9VUF9OQU1FICJHcm91cCIKCi8qCm11bHRpIGxpbmUKKi8KCiMgc2luZ2xlIGxpbmUKLy8gc2luZ2xlIGxpbmUKCndvcmtzcGFjZSAiU29mdHdhcmUgQXJjaGl0ZWN0dXJlOiBUaGUgSGFyZCBQYXJ0cyAoRXBpYyBTYWdhKSIgIkVwaWMgU2FnYSIgewogICAgIWlkZW50aWZpZXJzIGZsYXQKICAgICFpbXBsaWVkUmVsYXRpb25zaGlwcyB0cnVlCiAgICMhaW5jbHVkZSA8ZmlsZXxkaXJlY3Rvcnl8dXJsPgoKICAgICFkb2NzIGRvY3VtZW50cwogICAgIWFkcnMgZGVjaXNpb25zCgogICAgIWNvbnN0IEZPTyAiU29tZSB0ZXh0IHlvdSB3YW50IHRvIHJldXNlLiIKCiAgICBtb2RlbCB7CiAgICAgICAgcGVubnkgPSBQZXJzb24gIlBlbm55IiB7CiAgICAgICAgICAgIGRlc2NyaXB0aW9uICJQdXJjaGFzaW5nIGN1c3RvbWVyIgogICAgICAgIH0KICAgICAgICBidXltb3JlID0gc29mdHdhcmVTeXN0ZW0gIkJ1eSBNb3JlIiB7CiAgICAgICAgICAgIGRlc2NyaXB0aW9uICJPbmxpbmUgQnV5IE1vcmUgc3RvcmVmcm9udCIKICAgICAgICAgICAgcGVyc3BlY3RpdmVzIHsKICAgICAgICAgICAgfQogICAgICAgICAgICBvcmRlclBsYWNlbWVudFNlcnZpY2UgPSBjb250YWluZXIgIk9yZGVyIE1hbmFnZW1lbnQgU2VydmljZSIgewogICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIkFjY2VwdHMgb3JkZXJzIgogICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiU3ByaW5nIEVjb3N5c3RlbSIKICAgICAgICAgICAgICAgIHRhZ3MgInRhZyIKICAgICAgICAgICAgICAgIHBlcnNwZWN0aXZlcyB7CiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgIH0KICAgICAgICAgICAgcGF5bWVudFNlcnZpY2UgPSBjb250YWluZXIgIlBheW1lbnQgU2VydmljZSIgewogICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIlByb2Nlc3MgcGF5bWVudHMiCiAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJTcHJpbmcgRWNvc3lzdGVtIgogICAgICAgICAgICAgICAgdGFncyAidGFnIgogICAgICAgICAgICAgICAgcGVyc3BlY3RpdmVzIHsKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgfQogICAgICAgICAgICBmdWxmaWxsbWVudFNlcnZpY2UgPSBjb250YWluZXIgIkZ1bGZpbGxtZW50IFNlcnZpY2UiIHsKICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uICJTaGlwcyBvcmRlcnMiCiAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJTcHJpbmcgRWNvc3lzdGVtIgogICAgICAgICAgICAgICAgdGFncyAidGFnIgogICAgICAgICAgICAgICAgcGVyc3BlY3RpdmVzIHsKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgfQogICAgICAgICAgICBlbWFpbFNlcnZpY2UgPSBjb250YWluZXIgIkUtbWFpbCBTZXJ2aWNlIiB7CiAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiRS1tYWlsIGN1c3RvbWVycyIKICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIlNwcmluZyBFY29zeXN0ZW0iCiAgICAgICAgICAgICAgICB0YWdzICJ0YWciCiAgICAgICAgICAgICAgICBwZXJzcGVjdGl2ZXMgewogICAgICAgICAgICAgICAgfQogICAgICAgICAgICB9CiAgICAgICAgICAgIG9yY2hlc3RyYXRvciA9IGNvbnRhaW5lciAiT3JjaGVzdHJhdG9yIiB7CiAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiQ29vcmRpbmF0ZXMgdGhlIHdvcmtmbG93IgogICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiU3ByaW5nIEVjb3N5c3RlbSIKICAgICAgICAgICAgICAgIHRhZ3MgInRhZyIKICAgICAgICAgICAgICAgIHBlcnNwZWN0aXZlcyB7CiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICBwZW5ueSAtPiB0aGlzICJwdXJjaGFzZSBwcm9kdWN0cyIgIkpTT04gb3ZlciBIVFRQUyIgInN5bmMtb25lLXdheSIgewogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgdGhpcyAtPiBvcmRlclBsYWNlbWVudFNlcnZpY2UgImFjY2VwdCB0aGUgb3JkZXIiICJKU09OIG92ZXIgSFRUUFMiICJzeW5jLW9uZS13YXkiIHsKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIHRoaXMgLT4gcGF5bWVudFNlcnZpY2UgInByb2Nlc3MgdGhlIHBheW1lbnQiICJKU09OIG92ZXIgSFRUUFMiICJzeW5jLW9uZS13YXkiIHsKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIHRoaXMgLT4gZnVsZmlsbG1lbnRTZXJ2aWNlICJzaGlwIHRoZSBvcmRlciIgIkpTT04gb3ZlciBIVFRQUyIgInN5bmMtb25lLXdheSIgewogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgdGhpcyAtPiBlbWFpbFNlcnZpY2UgInNlbmQgdGhlIG9yZGVyIHN0YXR1cyIgIkpTT04gb3ZlciBIVFRQUyIgInN5bmMtb25lLXdheSIgewogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgY29tcG9uZW50ICJTb21lIHNlcnZpY2UgZGV0YWlsIiB7CiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIlNvbWUgc2VydmljZSBkZXRhaWwiCiAgICAgICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiZm9vLGJhciIKICAgICAgICAgICAgICAgICAgICBwZXJzcGVjdGl2ZXMgewogICAgICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgfQogICAgICAgfQogICAgfQoKICAgICMgaHR0cHM6Ly92aXNtZS5jby9ibG9nL3dlYnNpdGUtY29sb3Itc2NoZW1lcy8KICAgIHZpZXdzIHsKICAgICAgICB0aGVtZSBkZWZhdWx0CiAgICAgICAgc3R5bGVzIHsKICAgICAgICAgICAgZWxlbWVudCAiTWVzc2FnZUJyb2tlciIgewogICAgICAgICAgICAgICAgc2hhcGUgQ3lsaW5kZXIKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgI0U4QTg3QwogICAgICAgICAgICB9CiAgICAgICAgICAgIGVsZW1lbnQgIkRhdGFTdG9yZSIgewogICAgICAgICAgICAgICAgc2hhcGUgQ3lsaW5kZXIKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgI0UyN0Q2MAogICAgICAgICAgICB9CiAgICAgICAgICAgIGVsZW1lbnQgIkNyb24iIHsKICAgICAgICAgICAgICAgIHNoYXBlIFJvYm90CiAgICAgICAgICAgIH0KICAgICAgICAgICAgZWxlbWVudCAiRmlsZVN0b3JlIiB7CiAgICAgICAgICAgICAgICBzaGFwZSBGb2xkZXIKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgI2RhYzI5MgogICAgICAgICAgICB9CiAgICAgICAgICAgICMgc2hhcGUgPEJveHxSb3VuZGVkQm94fENpcmNsZXxFbGxpcHNlfEhleGFnb258Q3lsaW5kZXJ8UGlwZXxQZXJzb258Um9ib3R8Rm9sZGVyfFdlYkJyb3dzZXJ8TW9iaWxlRGV2aWNlUG9ydHJhaXR8TW9iaWxlRGV2aWNlTGFuZHNjYXBlfENvbXBvbmVudD4KICAgICAgICAgICAgZWxlbWVudCAiQ2hhbm5lbCIgewogICAgICAgICAgICAgICAgc2hhcGUgUGlwZQogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjQzM4RDlFCiAgICAgICAgICAgIH0KICAgICAgICAgICAgZWxlbWVudCAiQ2hhbm5lbCBBZGFwdGVyIiB7CiAgICAgICAgICAgICAgICBzaGFwZSBFbGxpcHNlCiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kICM0MUIzQTMKICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJNaWNyb3NlcnZpY2UiIHsKICAgICAgICAgICAgICAgIHNoYXBlIEhleGFnb24KICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJDb21tYW5kTGluZSIgewogICAgICAgICAgICAgICAgc2hhcGUgQm94CiAgICAgICAgICAgIH0KICAgICAgICAgICAgZWxlbWVudCAiV2ViVUkiIHsKICAgICAgICAgICAgICAgIHNoYXBlIFdlYkJyb3dzZXIKICAgICAgICAgICAgfQoKICAgICAgICAgICAgcmVsYXRpb25zaGlwICJhc3luYy1vbmUtd2F5IiB7CiAgICAgICAgICAgICAgICB0aGlja25lc3MgMgogICAgICAgICAgICAgICAgc3R5bGUgZG90dGVkCiAgICAgICAgICAgICAgICBjb2xvciAjMjQyNTgyCiAgICAgICAgICAgIH0KICAgICAgICAgICAgcmVsYXRpb25zaGlwICJzeW5jLW9uZS13YXkiIHsKICAgICAgICAgICAgICAgIHRoaWNrbmVzcyAyCiAgICAgICAgICAgICAgICBzdHlsZSBzb2xpZAogICAgICAgICAgICAgICAgY29sb3IgIzAwMDBGRgogICAgICAgICAgICB9CiAgICAgICAgICAgIHJlbGF0aW9uc2hpcCAic3luYy10d28td2F5IiB7CiAgICAgICAgICAgICAgICB0aGlja25lc3MgMgogICAgICAgICAgICAgICAgc3R5bGUgc29saWQKICAgICAgICAgICAgICAgIGNvbG9yICM1NTNENjcKICAgICAgICAgICAgfQogICAgICAgICAgICByZWxhdGlvbnNoaXAgImpzb24tb3Zlci1tb25nb2RiLXdpcmUtcHJvdG9jb2wiIHsKICAgICAgICAgICAgICAgIHRoaWNrbmVzcyAyCiAgICAgICAgICAgICAgICBzdHlsZSBkb3R0ZWQKICAgICAgICAgICAgICAgIGNvbG9yICNGNjRDNzIKICAgICAgICAgICAgfQogICAgICAgICAgICByZWxhdGlvbnNoaXAgImpkYmMtZHJpdmVyIiB7CiAgICAgICAgICAgICAgICB0aGlja25lc3MgMgogICAgICAgICAgICAgICAgc3R5bGUgZG90dGVkCiAgICAgICAgICAgICAgICBjb2xvciAjRjY0QzcyCiAgICAgICAgICAgIH0KICAgICAgICB9CgogICAgfQp9"
+  },
+  "views" : {
+    "componentViews" : [ {
+      "automaticLayout" : {
+        "applied" : false,
+        "edgeSeparation" : 0,
+        "implementation" : "Graphviz",
+        "nodeSeparation" : 300,
+        "rankDirection" : "TopBottom",
+        "rankSeparation" : 300,
+        "vertices" : false
+      },
+      "containerId" : "7",
+      "elements" : [ {
+        "id" : "14",
+        "x" : 0,
+        "y" : 0
+      } ],
+      "externalContainerBoundariesVisible" : false,
+      "generatedKey" : true,
+      "key" : "Component-001",
+      "order" : 4
+    } ],
+    "configuration" : {
+      "branding" : { },
+      "lastSavedView" : "SystemContext-001",
+      "metadataSymbols" : "SquareBrackets",
+      "styles" : {
+        "elements" : [ {
+          "background" : "#e8a87c",
+          "shape" : "Cylinder",
+          "tag" : "MessageBroker"
+        }, {
+          "background" : "#e27d60",
+          "shape" : "Cylinder",
+          "tag" : "DataStore"
+        }, {
+          "shape" : "Robot",
+          "tag" : "Cron"
+        }, {
+          "background" : "#dac292",
+          "shape" : "Folder",
+          "tag" : "FileStore"
+        }, {
+          "background" : "#c38d9e",
+          "shape" : "Pipe",
+          "tag" : "Channel"
+        }, {
+          "background" : "#41b3a3",
+          "shape" : "Ellipse",
+          "tag" : "Channel Adapter"
+        }, {
+          "shape" : "Hexagon",
+          "tag" : "Microservice"
+        }, {
+          "shape" : "Box",
+          "tag" : "CommandLine"
+        }, {
+          "shape" : "WebBrowser",
+          "tag" : "WebUI"
+        } ],
+        "relationships" : [ {
+          "color" : "#242582",
+          "style" : "Dotted",
+          "tag" : "async-one-way",
+          "thickness" : 2
+        }, {
+          "color" : "#0000ff",
+          "style" : "Solid",
+          "tag" : "sync-one-way",
+          "thickness" : 2
+        }, {
+          "color" : "#553d67",
+          "style" : "Solid",
+          "tag" : "sync-two-way",
+          "thickness" : 2
+        }, {
+          "color" : "#f64c72",
+          "style" : "Dotted",
+          "tag" : "json-over-mongodb-wire-protocol",
+          "thickness" : 2
+        }, {
+          "color" : "#f64c72",
+          "style" : "Dotted",
+          "tag" : "jdbc-driver",
+          "thickness" : 2
+        } ]
+      },
+      "terminology" : { },
+      "themes" : [ "https://static.structurizr.com/themes/default/theme.json" ]
+    },
+    "containerViews" : [ {
+      "automaticLayout" : {
+        "applied" : true,
+        "edgeSeparation" : 0,
+        "implementation" : "Graphviz",
+        "nodeSeparation" : 300,
+        "rankDirection" : "TopBottom",
+        "rankSeparation" : 300,
+        "vertices" : false
+      },
+      "dimensions" : {
+        "height" : 1991,
+        "width" : 3140
+      },
+      "elements" : [ {
+        "id" : "1",
+        "x" : 1345,
+        "y" : 200
+      }, {
+        "id" : "3",
+        "x" : 220,
+        "y" : 1400
+      }, {
+        "id" : "4",
+        "x" : 970,
+        "y" : 1400
+      }, {
+        "id" : "5",
+        "x" : 1720,
+        "y" : 1400
+      }, {
+        "id" : "6",
+        "x" : 2470,
+        "y" : 1400
+      }, {
+        "id" : "7",
+        "x" : 1345,
+        "y" : 800
+      } ],
+      "externalSoftwareSystemBoundariesVisible" : false,
+      "generatedKey" : true,
+      "key" : "Container-001",
+      "order" : 3,
+      "relationships" : [ {
+        "id" : "10"
+      }, {
+        "id" : "11"
+      }, {
+        "id" : "12"
+      }, {
+        "id" : "13"
+      }, {
+        "id" : "8"
+      } ],
+      "softwareSystemId" : "2"
+    } ],
+    "systemContextViews" : [ {
+      "automaticLayout" : {
+        "applied" : true,
+        "edgeSeparation" : 0,
+        "implementation" : "Graphviz",
+        "nodeSeparation" : 300,
+        "rankDirection" : "TopBottom",
+        "rankSeparation" : 300,
+        "vertices" : false
+      },
+      "dimensions" : {
+        "height" : 1300,
+        "width" : 850
+      },
+      "elements" : [ {
+        "id" : "1",
+        "x" : 199,
+        "y" : 200
+      }, {
+        "id" : "2",
+        "x" : 199,
+        "y" : 800
+      } ],
+      "enterpriseBoundaryVisible" : true,
+      "generatedKey" : true,
+      "key" : "SystemContext-001",
+      "order" : 2,
+      "relationships" : [ {
+        "id" : "9"
+      } ],
+      "softwareSystemId" : "2"
+    } ],
+    "systemLandscapeViews" : [ {
+      "automaticLayout" : {
+        "applied" : true,
+        "edgeSeparation" : 0,
+        "implementation" : "Graphviz",
+        "nodeSeparation" : 300,
+        "rankDirection" : "TopBottom",
+        "rankSeparation" : 300,
+        "vertices" : false
+      },
+      "dimensions" : {
+        "height" : 1300,
+        "width" : 850
+      },
+      "elements" : [ {
+        "id" : "1",
+        "x" : 199,
+        "y" : 200
+      }, {
+        "id" : "2",
+        "x" : 199,
+        "y" : 800
+      } ],
+      "enterpriseBoundaryVisible" : true,
+      "generatedKey" : true,
+      "key" : "SystemLandscape-001",
+      "order" : 1,
+      "relationships" : [ {
+        "id" : "9"
+      } ]
+    } ]
+  }
+}

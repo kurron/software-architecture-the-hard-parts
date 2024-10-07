@@ -1,0 +1,9 @@
+== Software Architecture
+* Summarize the software architecture
+* What does the "big picture" look like?
+* Is there a clear structure?
+* Is it clear how the system works from the "30,000 foot view"?
+* Does it show major containers and technology choices?
+* Does it show major components and their interactions?
+* What are the key internal interfaces? (e.g. web service between web and business tiers)
+* Technical people only
