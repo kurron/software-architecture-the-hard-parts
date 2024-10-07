@@ -21,6 +21,11 @@ This project are simple implementations of the eight transaction saga pattern de
 
 == Tips and Tricks
 
+* order placement service
+* payment service
+* fulfillment service
+* email service
+
 === Architectural Diagrams
 //`docker run --pull always --interactive --tty --rm --name structurizr --publish 8080:8080 --env STRUCTURIZR_WORKSPACE_PATH=architectural-diagrams --volume $(pwd):/usr/local/structurizr structurizr/lite:latest`
 
