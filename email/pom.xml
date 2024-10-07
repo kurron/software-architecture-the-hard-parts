@@ -3,17 +3,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.4</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<groupId>org.kurron.hard.parts</groupId>
+		<artifactId>software-architecture-the-hard-parts</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<packaging>pom</packaging>
-	<groupId>org.kurron.hard.parts</groupId>
-	<artifactId>software-architecture-the-hard-parts</artifactId>
+	<artifactId>email</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Software Architecture: The Hard Parts</name>
-	<description>Showcasing the different transactional sagas</description>
+	<name>E-Mail Service</name>
+	<description>Send order status e-mail to customers</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -192,10 +189,4 @@
 		</plugins>
 	</build>
 
-	<modules>
-		<module>order-placement</module>
-		<module>payment</module>
-		<module>fulfillment</module>
-		<module>email</module>
-	</modules>
 </project>
