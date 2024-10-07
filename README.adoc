@@ -9,6 +9,60 @@ endif::[]
 == Overview
 This project are simple implementations of the eight transaction saga pattern described in link:/[Software Architecture: The Hard Parts]. I've done this to help me better understand the trade-offs of each type. You'll find a branch for each implementation, where the branch name mirrors the pattern name, e.g. `phone-tag`.
 
+[cols="4*"]
+|===
+| Pattern Name | Communication | Consistency | Coordination | Branch Name
+
+| Epic Saga
+| Synchronous
+| Atomic
+| Orchestrated
+| epic-saga
+
+| Phone Tag Saga
+| Synchronous
+| Atomic
+| Choreographed
+| phone-tag-saga
+
+| Fairy Tale Saga
+| Synchronous
+| Eventual
+| Orchestrated
+| fairy-tale-saga
+
+| Time Travel Saga
+| Synchronous
+| Eventual
+| Choreographed
+| time-travel-saga
+
+| Fantasy Fiction Saga
+| Asynchronous
+| Atomic
+| Orchestrated
+| fantasy-fiction-saga
+
+| Horror Story Saga
+| Asynchronous
+| Atomic
+| Choreographed
+| horror-story-saga
+
+| Parallel Saga
+| Asynchronous
+| Eventual
+| Orchestrated
+| parallel-saga
+
+| Anthology Saga
+| Asynchronous
+| Eventual
+| Choreographed
+| anthology-saga
+
+|===
+
 == Prerequisites
 * JDK 21 or greater
 
