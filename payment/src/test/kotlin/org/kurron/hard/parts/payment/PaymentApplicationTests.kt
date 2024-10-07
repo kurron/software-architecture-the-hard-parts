@@ -1,12 +1,12 @@
-package org.kurron.hard.pats.skeleton
+package org.kurron.hard.parts.payment
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
 
-@Import(TestcontainersConfiguration::class)
+@Import(PaymentTestcontainersConfiguration::class)
 @SpringBootTest
-class OrderPlacementApplicationTests {
+class PaymentApplicationTests {
 
 	@Test
 	fun contextLoads() {

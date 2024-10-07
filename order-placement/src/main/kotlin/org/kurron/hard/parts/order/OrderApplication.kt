@@ -1,11 +1,11 @@
-package org.kurron.hard.pats.skeleton
+package org.kurron.hard.parts.order
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class SkeletonApplication
+class OrderApplication
 
 fun main(args: Array<String>) {
-	runApplication<SkeletonApplication>(*args)
+	runApplication<OrderApplication>(*args)
 }
