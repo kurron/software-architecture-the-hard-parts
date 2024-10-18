@@ -57,6 +57,8 @@ workspace "Software Architecture: The Hard Parts (Epic Saga)" "Epic Saga" {
                 tags "tag"
                 perspectives {
                 }
+                this -> penny "send the order status" "SMTP" "async-one-way" {
+                }
             }
             orchestrator = container "Orchestrator" {
                 description "Coordinates the workflow"
