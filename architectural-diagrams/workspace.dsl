@@ -75,8 +75,6 @@ workspace "Software Architecture: The Hard Parts (Epic Saga)" "Epic Saga" {
                 tags "tag"
                 perspectives {
                 }
-                this -> penny "send the order status" "SMTP" "async-one-way" {
-                }
                 component "Database" {
                     description "Private state"
                     technology "PostgreSQL"
