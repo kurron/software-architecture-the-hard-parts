@@ -1,80 +1,80 @@
 {
   "configuration" : { },
-  "description" : "Fairy Tale Saga",
+  "description" : "Parallel Saga",
   "documentation" : {
     "decisions" : [ {
       "content" : "# 1. Record architecture decisions\n\n## Status\nAccepted\n\n## Context\nWe will record the architectural decisions made on this project.\n\n## Decision\nWe will use Architecture Decision Records, as described by Michael Nygard in this article: [Documenting Architecture Decisions](http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-decisions)\n\n## Consequences\nSee Michael Nygard's article, linked above.",
-      "date" : "2024-10-18T20:35:29Z",
+      "date" : "2024-10-18T20:46:02Z",
       "format" : "Markdown",
       "id" : "1",
       "status" : "Accepted",
       "title" : "Record architecture decisions"
     }, {
       "content" : "# 1. Use Mark Richards' \"arrow\" Notation\n\n## Status\nAccepted\n\n## Context\nLooking at a static diagram, especially when printed on a black and white printer, it can be difficult to quickly grasp how each component interacts with others. In particular, the use of arrows and lines are often ambiguous and/or misleading, decreasing the understandability of the diagram.\n\n## Decision\n[Mark Richards](https://developertoarchitect.com/lessons/) has a simple set of conventions when it comes to lines and arrows that we will incorporate into our C4 views: [Lesson 94 - Guidelines for Architecture Diagrams](https://developertoarchitect.com/lessons/lesson94.html) and [Lesson 95 - Guidelines for Architecture Diagrams Revisited](https://developertoarchitect.com/lessons/lesson95.html).\n\n## Consequences\nBy taking using a simple convention when it comes to line and arrow use, people should more quickly understand what is being diagrammed with less ambiguity.",
-      "date" : "2024-10-18T20:35:29Z",
+      "date" : "2024-10-18T20:46:02Z",
       "format" : "Markdown",
       "id" : "10",
       "status" : "Accepted",
       "title" : "Use Mark Richards' \"arrow\" Notation"
     }, {
       "content" : "# 1. Use The Spring Modulith Framework\n\n## Status\nAccepted\n\n## Context\nOne of the goals of this project is to exercise the notion of a \"modular monolith\", seeing how it behaves in a working system. \n\n## Decision\n[Spring Modulish](https://spring.io/projects/spring-modulith) is a new framework that provides guide rails and opinions on how JVM applications can have loosely coupled components and retain the benefits of a monolith. Let's see how much of the heavy lifting it can do for us.\n\n## Consequences\nBy using a framework, we cut down on the work needed to keep components decoupled. Using Java 9 module system looks like a ton of work and using a message broker, like RabbitMQ, introduces probably just as much work. Since we're already using Spring for other parts of the solution, it makes sense to use it for modularity concerns as well.",
-      "date" : "2024-10-18T20:35:29Z",
+      "date" : "2024-10-18T20:46:02Z",
       "format" : "Markdown",
       "id" : "11",
       "status" : "Accepted",
       "title" : "Use The Spring Modulith Framework"
     }, {
       "content" : "# 1. Build Container Images Using Buildpacks\n\n## Status\nAccepted\n\n## Context\nWriting Docker files by hand is cumbersome and inefficient. There are better ways.\n\n## Decision\nWe will use  [Buildpacks](https://buildpacks.io/) to assemble container images for the services to be deployed to Kubernetes.\n\n## Consequences\nNo more debugging Dockerfiles or large images. Cloud Native Buildpacks does much of the heavy lifting, generating optimized images that can be used with any container runtime.",
-      "date" : "2024-10-18T20:35:29Z",
+      "date" : "2024-10-18T20:46:02Z",
       "format" : "Markdown",
       "id" : "2",
       "status" : "Accepted",
       "title" : "Build Container Images Using Buildpacks"
     }, {
       "content" : "# 1. Use Kotlin For Production Code\n\n## Status\nAccepted\n\n## Context\nJava 17 has improved the programmer experience but Kotlin, in our opinion, provides a better one.\n\n## Decision\nWe will use [Kotlin](https://kotlinlang.org/) to develop the production modules. Test will use Java, primarily due to some complexity in getting Cucumber and Kotlin to play nicely together.\n\n## Consequences\nKotlin has many features baked into the language that require extra libraries to accomplish in Java, e.g. Lombok. Fewer dependencies means fewer upgrade headaches in the future.",
-      "date" : "2024-10-18T20:35:29Z",
+      "date" : "2024-10-18T20:46:02Z",
       "format" : "Markdown",
       "id" : "3",
       "status" : "Accepted",
       "title" : "Use Kotlin For Production Code"
     }, {
       "content" : "# 1. Use Spring Pulsar\n\n## Status\nRejected\n\n## Context\nWorking with the Pulsar Java library requires boilerplate code and an understanding of numerous options. A simpler programming model would improve the developer experience.\n\n## Decision\n~~We will use the [Spring for Apache Pulsar](https://github.com/spring-projects-experimental/spring-pulsar) project to develop the gateways to Pulsar.~~ Spring Integration currently integrates only with RabbitMQ and we want to leverage it to keep the code simple. Although it should be possible to host Pulsar in our Kubernetes cluster, we were unable to get it to come all the way up.  For that reason, we'll be using RabbitMQ as our message broker.\n\n## Consequences\nThe project is in its infancy but seems to have progressed nicely, supporting the features that this project needs. As new milestones come up, we will upgrade as well as report any bugs found during development.",
-      "date" : "2024-10-18T20:35:29Z",
+      "date" : "2024-10-18T20:46:02Z",
       "format" : "Markdown",
       "id" : "4",
       "status" : "Rejected",
       "title" : "Use Spring Pulsar"
     }, {
       "content" : "# 1. Use Spring Integration\n\n## Status\nRejected\n\n## Context\nThe solution is centered around messaging and its accepted patterns, as described in [Enterprise Integration Patterns](https://www.enterpriseintegrationpatterns.com/). Implementing those patterns should not be a concern of the project, allowing the team to focus on business value.\n\n## Decision\nWe will not use [Spring Integration](https://spring.io/projects/spring-integration) be our implementation of those patterns. While we anticipate using some of the patterns, we want to keep things simple until something more complex is needed.\n\n## Consequences\nWe'll either have to hand code messaging patterns or we'll have to look into other frameworks, e.g. [Spring AMQP](https://spring.io/projects/spring-amqp)",
-      "date" : "2024-10-18T20:35:29Z",
+      "date" : "2024-10-18T20:46:02Z",
       "format" : "Markdown",
       "id" : "5",
       "status" : "Rejected",
       "title" : "Use Spring Integration"
     }, {
       "content" : "# 1. Use Explicit Contexts\n\n## Status\nAccepted\n\n## Context\nMichael Nygard has a very interesting idea that should allow system to evolve over time. From his book [Release It!]():\n\n>Suppose your service receives this fragment of JSON inside a request: `{\"item\": \"029292934\"}`\n>\n>How much do we know about the item? Is that string the item itself? Or is it an item identifier? Maybe the field would be better named “itemID.” Supposing that it is an identifier, our service can’t do very much with it. In fact, only four things are possible:\n>\n>1. Pass it through as a token to other services. (This includes returning it to the same caller in the future.)\n>2. Look it up by calling another service.\n>3. Look it up in our own database.\n>4. Discard it.\n>\n>In the first case, we’re just using the “itemID” as a token. We don’t care about the internal structure. In this case it would be a mistake to convert it from string to numeric. We’d be imposing a restriction that doesn’t add any value and will probably need to be changed—with huge disruption—in the future.\n>\n>In the second and third cases, we’re using the “itemID” as something we can resolve to get more information. But there’s a serious problem here. The bare string shown earlier doesn’t tell us who has the authoritative information. If the answer isn’t in our own database, we need to call another service. Which service?\n>\n>This issue is so pervasive that it does not even look like a problem at first. In order to get item information, your service must already know who to call! That’s an implicit dependency.\n>\n>That implicit dependency limits you to working with just the one service provider. If you need to support items from two different “universes,” it’s going to be very disruptive.\n>\n>Suppose instead the initial fragment of JSON looked like this: `{\"itemID\": \"https://example.com/policies/029292934\"}`\n>\n>This URL still works if we just want to use it as an opaque token to pass forward. From one perspective, it’s still just a Unicode string.\n>\n>This URL also still works if we need to resolve it to get more information. But now our service does not have to bake in knowledge of the solitary authority. We can support more than one of them.\n>\n>By the way, using a full URL also makes integration testing easier. We no longer need “test” versions of the other services. We can supply our own test harnesses and use URLs to those instead of the production authorities.\n>\n>This example is all in the context of interservice communication. But making implicit context into explicit context has big benefits inside services as well. If you’ve worked on a Ruby on Rails system, you might have run into difficulty when trying to use multiple relational databases from a single service. That’s because ActiveRecord uses an implicit database connection. This is convenient when there’s just one database, but it becomes a hindrance when you need more than one.\n>\n>Global state is the most insidious form of implicit context. That include configuration parameters. These will slow you down when you need to go from “one” to “more than one” of a collaboration.\n\n## Decision\nWhen possible, we will use a URI as the primary key for objects. Depending on the system in question, it may not be an easily resolvable location and may have to be deconstructed a bit before getting to something readable. For example: `mongodb:read-only-user@mongodb.example.com:5762/some-dataset?_id=9876` probably won't have an available protocol handler, so one must be written.  \n\n## Consequences\nIf we can use stable names for the authority portion of the URI, we should be able to move services around and still have systems find the data they need. One element we have to be keenly aware of is that changing the scheme portion later will be very difficult, if not impossible. If available, an HTTP or GraphQL URI should be preferred over direct database or coordinates. In practical terms, this means that we still use database generated primary keys but return a URL as the ID of the asset.  For example, document `1234` would be exposed to the caller as `http://alpha.test.example.com/user/1234`. If that URI is ever \"tugged\" on, hyperlinks are provided to other possible operations on the resource.",
-      "date" : "2024-10-18T20:35:29Z",
+      "date" : "2024-10-18T20:46:02Z",
       "format" : "Markdown",
       "id" : "6",
       "status" : "Accepted",
       "title" : "Use Explicit Contexts"
     }, {
       "content" : "# 1. Use Message Routing\n\n## Status\nAccepted\n\n## Context\nIn a message centric solution, routing of messages to the correct handler is both crucial and complex. Over time, those routing rules will change and we want a mechanism that allows for easy evolution of the system.\n\n## Decision\nLeverage the [Message Router](https://www.enterpriseintegrationpatterns.com/patterns/messaging/MessageRouter.html) pattern both at the external (AMQP) and internal (Spring Integration) messaging levels. In particular, messages should provide a `label` field that can be used to make routing decisions based on pattern matching.\n\n## Consequences\nAltering what component handles a particular class of message should be a trivial configuration change, requiring only small code changes.  For example, one day the label `command.character.new` could be routed to a component that handles all character commands but on the next day, that same label could be routed to a component dedicated to handling that command only.  Such flexibility should reduce the maintenance cost of the system. AMQP specifies the `Topic Exchange` and Spring Integration the `HeaderValueRouter` for just this purpose.",
-      "date" : "2024-10-18T20:35:29Z",
+      "date" : "2024-10-18T20:46:02Z",
       "format" : "Markdown",
       "id" : "7",
       "status" : "Accepted",
       "title" : "Use Message Routing"
     }, {
       "content" : "# 1. Use Spring AMQP\n\n## Status\nRejected\n\n## Context\nIn a message centric solution, routing of messages to the correct handler is both crucial and complex. Over time, those routing rules will change and we want a mechanism that allows for easy evolution of the system.\n\n## Decision\nLeveraging the [Spring AMQP](https://spring.io/projects/spring-amqp) framework to manage the routing of messages in the system does not make sense in a [Spring Modulith](https://spring.io/projects/spring-modulith) environment.\n\n## Consequences\nBy taking using a framework that uses in-process messages we can avoid some of the complexity associated with using messages for modularity.",
-      "date" : "2024-10-18T20:35:29Z",
+      "date" : "2024-10-18T20:46:02Z",
       "format" : "Markdown",
       "id" : "8",
       "status" : "Rejected",
       "title" : "Use Spring AMQP"
     }, {
       "content" : "# 1. Use Spring HATEAOS\n\n## Status\nAccepted\n\n## Context\nHypermedia has existed for quite some time and is potentially useful on both the client and server side. The key notion is that the response payload contains links to allowable operations, guiding the UI through the workflow.  Although we currently do not have plans to drive the UI, we do support the notion of an explicit context for all of our identifiers. Hypermedia and the HAL format supports that.\n\n## Decision\nLeverage the [Spring HATEOAS](https://spring.io/projects/spring-hateoas) framework to manage the hyperlinks provided in API responses. The framework simplifies the management of links, including understanding location of the application sitting behind an API Gateway or proxy.  Being a Spring project, it understands the programming model used, greatly reducing the amount of configuration and code required to support hypermedia.\n\n## Consequences\nBy taking advantage of an exiting framework, we can use the linking concepts in the HAL format to ensure we're always using identifiers in an explicit context. In theory, the UI could be modified to take advantage of hypermedia to drive the workflow of operations. Using HAL, however, might prove to be a complication if we decide to introduce GraphQL. It is unclear how HAL can be generated when combining results from different services. ",
-      "date" : "2024-10-18T20:35:29Z",
+      "date" : "2024-10-18T20:46:02Z",
       "format" : "Markdown",
       "id" : "9",
       "status" : "Accepted",
@@ -168,7 +168,7 @@
   },
   "id" : 1,
   "lastModifiedAgent" : "structurizr-ui",
-  "lastModifiedDate" : "2024-10-18T20:36:04Z",
+  "lastModifiedDate" : "2024-10-18T20:46:37Z",
   "model" : {
     "people" : [ {
       "description" : "Purchasing customer",
@@ -183,7 +183,7 @@
         "destinationId" : "11",
         "id" : "12",
         "properties" : {
-          "structurizr.dsl.identifier" : "09ea08b7-70c9-4a18-9fd0-94f0413b2778"
+          "structurizr.dsl.identifier" : "bdfeda8c-584a-471b-b4a2-f9abc6e7def6"
         },
         "sourceId" : "1",
         "tags" : "Relationship,sync-one-way",
@@ -206,7 +206,7 @@
           "id" : "4",
           "name" : "Database",
           "properties" : {
-            "structurizr.dsl.identifier" : "58c52d77-f566-404e-8f6d-c46c0683abb4"
+            "structurizr.dsl.identifier" : "0bcb2da1-d0cf-4b5e-8da1-ee71715c05fe"
           },
           "tags" : "Element,Component",
           "technology" : "PostgreSQL"
@@ -227,7 +227,7 @@
           "id" : "6",
           "name" : "Database",
           "properties" : {
-            "structurizr.dsl.identifier" : "0b60a959-94ed-485c-8457-40b4a17012b7"
+            "structurizr.dsl.identifier" : "64c8ee8e-e0ed-43d9-8291-25b853e6982c"
           },
           "tags" : "Element,Component",
           "technology" : "PostgreSQL"
@@ -248,7 +248,7 @@
           "id" : "8",
           "name" : "Database",
           "properties" : {
-            "structurizr.dsl.identifier" : "c27223df-393c-4074-b75f-dd5f72ae2cef"
+            "structurizr.dsl.identifier" : "f966a7fd-bb49-447f-93dd-5786e45be44f"
           },
           "tags" : "Element,Component",
           "technology" : "PostgreSQL"
@@ -269,7 +269,7 @@
           "id" : "10",
           "name" : "Database",
           "properties" : {
-            "structurizr.dsl.identifier" : "1a208b70-dd35-4e32-9fd0-22d6341d2845"
+            "structurizr.dsl.identifier" : "8a703525-9f82-4f47-aeb8-5ce9193fb01e"
           },
           "tags" : "Element,Component",
           "technology" : "PostgreSQL"
@@ -290,12 +290,12 @@
           "id" : "18",
           "name" : "Database",
           "properties" : {
-            "structurizr.dsl.identifier" : "01a00c93-250c-4f4c-9753-bbd6a0c9136d"
+            "structurizr.dsl.identifier" : "2c7d5239-0410-4181-90ca-ec987cf7c4a5"
           },
           "tags" : "Element,Component",
           "technology" : "PostgreSQL"
         } ],
-        "description" : "Coordinates the workflow, maintains atomic consistency",
+        "description" : "Coordinates the workflow, assumes eventual consistency",
         "documentation" : { },
         "id" : "11",
         "name" : "Orchestrator",
@@ -307,7 +307,7 @@
           "destinationId" : "3",
           "id" : "14",
           "properties" : {
-            "structurizr.dsl.identifier" : "c204934b-7b4b-4f5e-846b-2027262a5ab3"
+            "structurizr.dsl.identifier" : "5b2631ac-7309-48b9-9cf3-8c69fc50c1bd"
           },
           "sourceId" : "11",
           "tags" : "Relationship,async-one-way",
@@ -317,7 +317,7 @@
           "destinationId" : "5",
           "id" : "15",
           "properties" : {
-            "structurizr.dsl.identifier" : "0cd7c29f-9cda-4ab7-8a74-6cabe875bf23"
+            "structurizr.dsl.identifier" : "dc6addde-8dc1-4994-96e4-3a4e85d2609b"
           },
           "sourceId" : "11",
           "tags" : "Relationship,async-one-way",
@@ -327,7 +327,7 @@
           "destinationId" : "7",
           "id" : "16",
           "properties" : {
-            "structurizr.dsl.identifier" : "f5a9d1e2-759c-4db7-b159-195576a1b21d"
+            "structurizr.dsl.identifier" : "ce928aab-1998-46ef-a00e-8e7990db2586"
           },
           "sourceId" : "11",
           "tags" : "Relationship,async-one-way",
@@ -337,7 +337,7 @@
           "destinationId" : "9",
           "id" : "17",
           "properties" : {
-            "structurizr.dsl.identifier" : "7d0b1cc0-fdce-41cc-8bfd-4447f4d6a806"
+            "structurizr.dsl.identifier" : "f19ddb9d-a551-4858-a3d3-f73a67f7b44e"
           },
           "sourceId" : "11",
           "tags" : "Relationship,async-one-way",
@@ -357,9 +357,9 @@
       "tags" : "Element,Software System"
     } ]
   },
-  "name" : "Software Architecture: The Hard Parts (Fairy Tale Saga)",
+  "name" : "Software Architecture: The Hard Parts (Parallel Saga)",
   "properties" : {
-    "structurizr.dsl" : "IyBodHRwczovL2dpdGh1Yi5jb20vc3RydWN0dXJpenIvZHNsL2Jsb2IvbWFzdGVyL2RvY3MvbGFuZ3VhZ2UtcmVmZXJlbmNlLm1kCgojKFBlcnNvbnxTb2Z0d2FyZVN5c3RlbXxDb250YWluZXJ8Q29tcG9uZW50fERlcGxveW1lbnROb2RlfEluZnJhc3RydWN0dXJlTm9kZXxTb2Z0d2FyZVN5c3RlbUluc3RhbmNlfENvbnRhaW5lckluc3RhbmNlfEN1c3RvbSkKCiFjb25zdCBDT0RFX05BTUUgIlByb2plY3QgQWxwaGEiCiFjb25zdCBHUk9VUF9OQU1FICJHcm91cCIKCi8qCm11bHRpIGxpbmUKKi8KCiMgc2luZ2xlIGxpbmUKLy8gc2luZ2xlIGxpbmUKCndvcmtzcGFjZSAiU29mdHdhcmUgQXJjaGl0ZWN0dXJlOiBUaGUgSGFyZCBQYXJ0cyAoRmFpcnkgVGFsZSBTYWdhKSIgIkZhaXJ5IFRhbGUgU2FnYSIgewogICAgIWlkZW50aWZpZXJzIGZsYXQKICAgICFpbXBsaWVkUmVsYXRpb25zaGlwcyB0cnVlCiAgICMhaW5jbHVkZSA8ZmlsZXxkaXJlY3Rvcnl8dXJsPgoKICAgICFkb2NzIGRvY3VtZW50cwogICAgIWFkcnMgZGVjaXNpb25zCgogICAgIWNvbnN0IEZPTyAiU29tZSB0ZXh0IHlvdSB3YW50IHRvIHJldXNlLiIKCiAgICBtb2RlbCB7CiAgICAgICAgcGVubnkgPSBQZXJzb24gIlBlbm55IiB7CiAgICAgICAgICAgIGRlc2NyaXB0aW9uICJQdXJjaGFzaW5nIGN1c3RvbWVyIgogICAgICAgIH0KICAgICAgICBidXltb3JlID0gc29mdHdhcmVTeXN0ZW0gIkJ1eSBNb3JlIiB7CiAgICAgICAgICAgIGRlc2NyaXB0aW9uICJPbmxpbmUgQnV5IE1vcmUgc3RvcmVmcm9udCIKICAgICAgICAgICAgcGVyc3BlY3RpdmVzIHsKICAgICAgICAgICAgfQogICAgICAgICAgICBvcmRlclBsYWNlbWVudFNlcnZpY2UgPSBjb250YWluZXIgIk9yZGVyIE1hbmFnZW1lbnQgU2VydmljZSIgewogICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIkFjY2VwdHMgb3JkZXJzIgogICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiU3ByaW5nIEVjb3N5c3RlbSIKICAgICAgICAgICAgICAgIHRhZ3MgInRhZyIKICAgICAgICAgICAgICAgIHBlcnNwZWN0aXZlcyB7CiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICBjb21wb25lbnQgIkRhdGFiYXNlIiB7CiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIlByaXZhdGUgc3RhdGUiCiAgICAgICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiUG9zdGdyZVNRTCIKICAgICAgICAgICAgICAgICAgICBwZXJzcGVjdGl2ZXMgewogICAgICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgfQogICAgICAgICAgICBwYXltZW50U2VydmljZSA9IGNvbnRhaW5lciAiUGF5bWVudCBTZXJ2aWNlIiB7CiAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiUHJvY2VzcyBwYXltZW50cyIKICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIlNwcmluZyBFY29zeXN0ZW0iCiAgICAgICAgICAgICAgICB0YWdzICJ0YWciCiAgICAgICAgICAgICAgICBwZXJzcGVjdGl2ZXMgewogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgY29tcG9uZW50ICJEYXRhYmFzZSIgewogICAgICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uICJQcml2YXRlIHN0YXRlIgogICAgICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIlBvc3RncmVTUUwiCiAgICAgICAgICAgICAgICAgICAgcGVyc3BlY3RpdmVzIHsKICAgICAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgIH0KICAgICAgICAgICAgZnVsZmlsbG1lbnRTZXJ2aWNlID0gY29udGFpbmVyICJGdWxmaWxsbWVudCBTZXJ2aWNlIiB7CiAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiU2hpcHMgb3JkZXJzIgogICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiU3ByaW5nIEVjb3N5c3RlbSIKICAgICAgICAgICAgICAgIHRhZ3MgInRhZyIKICAgICAgICAgICAgICAgIHBlcnNwZWN0aXZlcyB7CiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICBjb21wb25lbnQgIkRhdGFiYXNlIiB7CiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIlByaXZhdGUgc3RhdGUiCiAgICAgICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiUG9zdGdyZVNRTCIKICAgICAgICAgICAgICAgICAgICBwZXJzcGVjdGl2ZXMgewogICAgICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgfQogICAgICAgICAgICBlbWFpbFNlcnZpY2UgPSBjb250YWluZXIgIkUtbWFpbCBTZXJ2aWNlIiB7CiAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiRS1tYWlsIGN1c3RvbWVycyIKICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIlNwcmluZyBFY29zeXN0ZW0iCiAgICAgICAgICAgICAgICB0YWdzICJ0YWciCiAgICAgICAgICAgICAgICBwZXJzcGVjdGl2ZXMgewogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgY29tcG9uZW50ICJEYXRhYmFzZSIgewogICAgICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uICJQcml2YXRlIHN0YXRlIgogICAgICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIlBvc3RncmVTUUwiCiAgICAgICAgICAgICAgICAgICAgcGVyc3BlY3RpdmVzIHsKICAgICAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgIH0KICAgICAgICAgICAgb3JjaGVzdHJhdG9yID0gY29udGFpbmVyICJPcmNoZXN0cmF0b3IiIHsKICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uICJDb29yZGluYXRlcyB0aGUgd29ya2Zsb3csIG1haW50YWlucyBhdG9taWMgY29uc2lzdGVuY3kiCiAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJTcHJpbmcgRWNvc3lzdGVtIgogICAgICAgICAgICAgICAgdGFncyAidGFnIgogICAgICAgICAgICAgICAgcGVyc3BlY3RpdmVzIHsKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIHBlbm55IC0+IHRoaXMgInB1cmNoYXNlIHByb2R1Y3RzIiAiSlNPTiBvdmVyIEhUVFBTIiAic3luYy1vbmUtd2F5IiB7CiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICB0aGlzIC0+IG9yZGVyUGxhY2VtZW50U2VydmljZSAiYWNjZXB0IHRoZSBvcmRlciIgIkpTT04gb3ZlciBBTVFQIiAiYXN5bmMtb25lLXdheSIgewogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgdGhpcyAtPiBwYXltZW50U2VydmljZSAicHJvY2VzcyB0aGUgcGF5bWVudCIgIkpTT04gb3ZlciBBTVFQIiAiYXN5bmMtb25lLXdheSIgewogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgdGhpcyAtPiBmdWxmaWxsbWVudFNlcnZpY2UgInNoaXAgdGhlIG9yZGVyIiAiSlNPTiBvdmVyIEFNUVAiICJhc3luYy1vbmUtd2F5IiB7CiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICB0aGlzIC0+IGVtYWlsU2VydmljZSAic2VuZCB0aGUgb3JkZXIgc3RhdHVzIiAiSlNPTiBvdmVyIEFNUVAiICJhc3luYy1vbmUtd2F5IiB7CiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICBjb21wb25lbnQgIkRhdGFiYXNlIiB7CiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIlByaXZhdGUgc3RhdGUiCiAgICAgICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiUG9zdGdyZVNRTCIKICAgICAgICAgICAgICAgICAgICBwZXJzcGVjdGl2ZXMgewogICAgICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgfQogICAgICAgfQogICAgfQoKICAgICMgaHR0cHM6Ly92aXNtZS5jby9ibG9nL3dlYnNpdGUtY29sb3Itc2NoZW1lcy8KICAgIHZpZXdzIHsKICAgICAgICB0aGVtZSBkZWZhdWx0CiAgICAgICAgc3R5bGVzIHsKICAgICAgICAgICAgZWxlbWVudCAiTWVzc2FnZUJyb2tlciIgewogICAgICAgICAgICAgICAgc2hhcGUgQ3lsaW5kZXIKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgI0U4QTg3QwogICAgICAgICAgICB9CiAgICAgICAgICAgIGVsZW1lbnQgIkRhdGFTdG9yZSIgewogICAgICAgICAgICAgICAgc2hhcGUgQ3lsaW5kZXIKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgI0UyN0Q2MAogICAgICAgICAgICB9CiAgICAgICAgICAgIGVsZW1lbnQgIkNyb24iIHsKICAgICAgICAgICAgICAgIHNoYXBlIFJvYm90CiAgICAgICAgICAgIH0KICAgICAgICAgICAgZWxlbWVudCAiRmlsZVN0b3JlIiB7CiAgICAgICAgICAgICAgICBzaGFwZSBGb2xkZXIKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgI2RhYzI5MgogICAgICAgICAgICB9CiAgICAgICAgICAgICMgc2hhcGUgPEJveHxSb3VuZGVkQm94fENpcmNsZXxFbGxpcHNlfEhleGFnb258Q3lsaW5kZXJ8UGlwZXxQZXJzb258Um9ib3R8Rm9sZGVyfFdlYkJyb3dzZXJ8TW9iaWxlRGV2aWNlUG9ydHJhaXR8TW9iaWxlRGV2aWNlTGFuZHNjYXBlfENvbXBvbmVudD4KICAgICAgICAgICAgZWxlbWVudCAiQ2hhbm5lbCIgewogICAgICAgICAgICAgICAgc2hhcGUgUGlwZQogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjQzM4RDlFCiAgICAgICAgICAgIH0KICAgICAgICAgICAgZWxlbWVudCAiQ2hhbm5lbCBBZGFwdGVyIiB7CiAgICAgICAgICAgICAgICBzaGFwZSBFbGxpcHNlCiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kICM0MUIzQTMKICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJNaWNyb3NlcnZpY2UiIHsKICAgICAgICAgICAgICAgIHNoYXBlIEhleGFnb24KICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJDb21tYW5kTGluZSIgewogICAgICAgICAgICAgICAgc2hhcGUgQm94CiAgICAgICAgICAgIH0KICAgICAgICAgICAgZWxlbWVudCAiV2ViVUkiIHsKICAgICAgICAgICAgICAgIHNoYXBlIFdlYkJyb3dzZXIKICAgICAgICAgICAgfQoKICAgICAgICAgICAgcmVsYXRpb25zaGlwICJhc3luYy1vbmUtd2F5IiB7CiAgICAgICAgICAgICAgICB0aGlja25lc3MgMgogICAgICAgICAgICAgICAgc3R5bGUgZG90dGVkCiAgICAgICAgICAgICAgICBjb2xvciAjMjQyNTgyCiAgICAgICAgICAgIH0KICAgICAgICAgICAgcmVsYXRpb25zaGlwICJzeW5jLW9uZS13YXkiIHsKICAgICAgICAgICAgICAgIHRoaWNrbmVzcyAyCiAgICAgICAgICAgICAgICBzdHlsZSBzb2xpZAogICAgICAgICAgICAgICAgY29sb3IgIzAwMDBGRgogICAgICAgICAgICB9CiAgICAgICAgICAgIHJlbGF0aW9uc2hpcCAic3luYy10d28td2F5IiB7CiAgICAgICAgICAgICAgICB0aGlja25lc3MgMgogICAgICAgICAgICAgICAgc3R5bGUgc29saWQKICAgICAgICAgICAgICAgIGNvbG9yICM1NTNENjcKICAgICAgICAgICAgfQogICAgICAgICAgICByZWxhdGlvbnNoaXAgImpzb24tb3Zlci1tb25nb2RiLXdpcmUtcHJvdG9jb2wiIHsKICAgICAgICAgICAgICAgIHRoaWNrbmVzcyAyCiAgICAgICAgICAgICAgICBzdHlsZSBkb3R0ZWQKICAgICAgICAgICAgICAgIGNvbG9yICNGNjRDNzIKICAgICAgICAgICAgfQogICAgICAgICAgICByZWxhdGlvbnNoaXAgImpkYmMtZHJpdmVyIiB7CiAgICAgICAgICAgICAgICB0aGlja25lc3MgMgogICAgICAgICAgICAgICAgc3R5bGUgZG90dGVkCiAgICAgICAgICAgICAgICBjb2xvciAjRjY0QzcyCiAgICAgICAgICAgIH0KICAgICAgICB9CgogICAgfQp9"
+    "structurizr.dsl" : "IyBodHRwczovL2dpdGh1Yi5jb20vc3RydWN0dXJpenIvZHNsL2Jsb2IvbWFzdGVyL2RvY3MvbGFuZ3VhZ2UtcmVmZXJlbmNlLm1kCgojKFBlcnNvbnxTb2Z0d2FyZVN5c3RlbXxDb250YWluZXJ8Q29tcG9uZW50fERlcGxveW1lbnROb2RlfEluZnJhc3RydWN0dXJlTm9kZXxTb2Z0d2FyZVN5c3RlbUluc3RhbmNlfENvbnRhaW5lckluc3RhbmNlfEN1c3RvbSkKCiFjb25zdCBDT0RFX05BTUUgIlByb2plY3QgQWxwaGEiCiFjb25zdCBHUk9VUF9OQU1FICJHcm91cCIKCi8qCm11bHRpIGxpbmUKKi8KCiMgc2luZ2xlIGxpbmUKLy8gc2luZ2xlIGxpbmUKCndvcmtzcGFjZSAiU29mdHdhcmUgQXJjaGl0ZWN0dXJlOiBUaGUgSGFyZCBQYXJ0cyAoUGFyYWxsZWwgU2FnYSkiICJQYXJhbGxlbCBTYWdhIiB7CiAgICAhaWRlbnRpZmllcnMgZmxhdAogICAgIWltcGxpZWRSZWxhdGlvbnNoaXBzIHRydWUKICAgIyFpbmNsdWRlIDxmaWxlfGRpcmVjdG9yeXx1cmw+CgogICAgIWRvY3MgZG9jdW1lbnRzCiAgICAhYWRycyBkZWNpc2lvbnMKCiAgICAhY29uc3QgRk9PICJTb21lIHRleHQgeW91IHdhbnQgdG8gcmV1c2UuIgoKICAgIG1vZGVsIHsKICAgICAgICBwZW5ueSA9IFBlcnNvbiAiUGVubnkiIHsKICAgICAgICAgICAgZGVzY3JpcHRpb24gIlB1cmNoYXNpbmcgY3VzdG9tZXIiCiAgICAgICAgfQogICAgICAgIGJ1eW1vcmUgPSBzb2Z0d2FyZVN5c3RlbSAiQnV5IE1vcmUiIHsKICAgICAgICAgICAgZGVzY3JpcHRpb24gIk9ubGluZSBCdXkgTW9yZSBzdG9yZWZyb250IgogICAgICAgICAgICBwZXJzcGVjdGl2ZXMgewogICAgICAgICAgICB9CiAgICAgICAgICAgIG9yZGVyUGxhY2VtZW50U2VydmljZSA9IGNvbnRhaW5lciAiT3JkZXIgTWFuYWdlbWVudCBTZXJ2aWNlIiB7CiAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiQWNjZXB0cyBvcmRlcnMiCiAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJTcHJpbmcgRWNvc3lzdGVtIgogICAgICAgICAgICAgICAgdGFncyAidGFnIgogICAgICAgICAgICAgICAgcGVyc3BlY3RpdmVzIHsKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIGNvbXBvbmVudCAiRGF0YWJhc2UiIHsKICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiUHJpdmF0ZSBzdGF0ZSIKICAgICAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJQb3N0Z3JlU1FMIgogICAgICAgICAgICAgICAgICAgIHBlcnNwZWN0aXZlcyB7CiAgICAgICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgfQogICAgICAgICAgICB9CiAgICAgICAgICAgIHBheW1lbnRTZXJ2aWNlID0gY29udGFpbmVyICJQYXltZW50IFNlcnZpY2UiIHsKICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uICJQcm9jZXNzIHBheW1lbnRzIgogICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiU3ByaW5nIEVjb3N5c3RlbSIKICAgICAgICAgICAgICAgIHRhZ3MgInRhZyIKICAgICAgICAgICAgICAgIHBlcnNwZWN0aXZlcyB7CiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICBjb21wb25lbnQgIkRhdGFiYXNlIiB7CiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIlByaXZhdGUgc3RhdGUiCiAgICAgICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiUG9zdGdyZVNRTCIKICAgICAgICAgICAgICAgICAgICBwZXJzcGVjdGl2ZXMgewogICAgICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgfQogICAgICAgICAgICBmdWxmaWxsbWVudFNlcnZpY2UgPSBjb250YWluZXIgIkZ1bGZpbGxtZW50IFNlcnZpY2UiIHsKICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uICJTaGlwcyBvcmRlcnMiCiAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJTcHJpbmcgRWNvc3lzdGVtIgogICAgICAgICAgICAgICAgdGFncyAidGFnIgogICAgICAgICAgICAgICAgcGVyc3BlY3RpdmVzIHsKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIGNvbXBvbmVudCAiRGF0YWJhc2UiIHsKICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiUHJpdmF0ZSBzdGF0ZSIKICAgICAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJQb3N0Z3JlU1FMIgogICAgICAgICAgICAgICAgICAgIHBlcnNwZWN0aXZlcyB7CiAgICAgICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgfQogICAgICAgICAgICB9CiAgICAgICAgICAgIGVtYWlsU2VydmljZSA9IGNvbnRhaW5lciAiRS1tYWlsIFNlcnZpY2UiIHsKICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uICJFLW1haWwgY3VzdG9tZXJzIgogICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiU3ByaW5nIEVjb3N5c3RlbSIKICAgICAgICAgICAgICAgIHRhZ3MgInRhZyIKICAgICAgICAgICAgICAgIHBlcnNwZWN0aXZlcyB7CiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICBjb21wb25lbnQgIkRhdGFiYXNlIiB7CiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIlByaXZhdGUgc3RhdGUiCiAgICAgICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiUG9zdGdyZVNRTCIKICAgICAgICAgICAgICAgICAgICBwZXJzcGVjdGl2ZXMgewogICAgICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgfQogICAgICAgICAgICBvcmNoZXN0cmF0b3IgPSBjb250YWluZXIgIk9yY2hlc3RyYXRvciIgewogICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIkNvb3JkaW5hdGVzIHRoZSB3b3JrZmxvdywgYXNzdW1lcyBldmVudHVhbCBjb25zaXN0ZW5jeSIKICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIlNwcmluZyBFY29zeXN0ZW0iCiAgICAgICAgICAgICAgICB0YWdzICJ0YWciCiAgICAgICAgICAgICAgICBwZXJzcGVjdGl2ZXMgewogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgcGVubnkgLT4gdGhpcyAicHVyY2hhc2UgcHJvZHVjdHMiICJKU09OIG92ZXIgSFRUUFMiICJzeW5jLW9uZS13YXkiIHsKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIHRoaXMgLT4gb3JkZXJQbGFjZW1lbnRTZXJ2aWNlICJhY2NlcHQgdGhlIG9yZGVyIiAiSlNPTiBvdmVyIEFNUVAiICJhc3luYy1vbmUtd2F5IiB7CiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICB0aGlzIC0+IHBheW1lbnRTZXJ2aWNlICJwcm9jZXNzIHRoZSBwYXltZW50IiAiSlNPTiBvdmVyIEFNUVAiICJhc3luYy1vbmUtd2F5IiB7CiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICB0aGlzIC0+IGZ1bGZpbGxtZW50U2VydmljZSAic2hpcCB0aGUgb3JkZXIiICJKU09OIG92ZXIgQU1RUCIgImFzeW5jLW9uZS13YXkiIHsKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIHRoaXMgLT4gZW1haWxTZXJ2aWNlICJzZW5kIHRoZSBvcmRlciBzdGF0dXMiICJKU09OIG92ZXIgQU1RUCIgImFzeW5jLW9uZS13YXkiIHsKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIGNvbXBvbmVudCAiRGF0YWJhc2UiIHsKICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiUHJpdmF0ZSBzdGF0ZSIKICAgICAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJQb3N0Z3JlU1FMIgogICAgICAgICAgICAgICAgICAgIHBlcnNwZWN0aXZlcyB7CiAgICAgICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgfQogICAgICAgICAgICB9CiAgICAgICB9CiAgICB9CgogICAgIyBodHRwczovL3Zpc21lLmNvL2Jsb2cvd2Vic2l0ZS1jb2xvci1zY2hlbWVzLwogICAgdmlld3MgewogICAgICAgIHRoZW1lIGRlZmF1bHQKICAgICAgICBzdHlsZXMgewogICAgICAgICAgICBlbGVtZW50ICJNZXNzYWdlQnJva2VyIiB7CiAgICAgICAgICAgICAgICBzaGFwZSBDeWxpbmRlcgogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjRThBODdDCiAgICAgICAgICAgIH0KICAgICAgICAgICAgZWxlbWVudCAiRGF0YVN0b3JlIiB7CiAgICAgICAgICAgICAgICBzaGFwZSBDeWxpbmRlcgogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjRTI3RDYwCiAgICAgICAgICAgIH0KICAgICAgICAgICAgZWxlbWVudCAiQ3JvbiIgewogICAgICAgICAgICAgICAgc2hhcGUgUm9ib3QKICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJGaWxlU3RvcmUiIHsKICAgICAgICAgICAgICAgIHNoYXBlIEZvbGRlcgogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjZGFjMjkyCiAgICAgICAgICAgIH0KICAgICAgICAgICAgIyBzaGFwZSA8Qm94fFJvdW5kZWRCb3h8Q2lyY2xlfEVsbGlwc2V8SGV4YWdvbnxDeWxpbmRlcnxQaXBlfFBlcnNvbnxSb2JvdHxGb2xkZXJ8V2ViQnJvd3NlcnxNb2JpbGVEZXZpY2VQb3J0cmFpdHxNb2JpbGVEZXZpY2VMYW5kc2NhcGV8Q29tcG9uZW50PgogICAgICAgICAgICBlbGVtZW50ICJDaGFubmVsIiB7CiAgICAgICAgICAgICAgICBzaGFwZSBQaXBlCiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kICNDMzhEOUUKICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJDaGFubmVsIEFkYXB0ZXIiIHsKICAgICAgICAgICAgICAgIHNoYXBlIEVsbGlwc2UKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgIzQxQjNBMwogICAgICAgICAgICB9CiAgICAgICAgICAgIGVsZW1lbnQgIk1pY3Jvc2VydmljZSIgewogICAgICAgICAgICAgICAgc2hhcGUgSGV4YWdvbgogICAgICAgICAgICB9CiAgICAgICAgICAgIGVsZW1lbnQgIkNvbW1hbmRMaW5lIiB7CiAgICAgICAgICAgICAgICBzaGFwZSBCb3gKICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJXZWJVSSIgewogICAgICAgICAgICAgICAgc2hhcGUgV2ViQnJvd3NlcgogICAgICAgICAgICB9CgogICAgICAgICAgICByZWxhdGlvbnNoaXAgImFzeW5jLW9uZS13YXkiIHsKICAgICAgICAgICAgICAgIHRoaWNrbmVzcyAyCiAgICAgICAgICAgICAgICBzdHlsZSBkb3R0ZWQKICAgICAgICAgICAgICAgIGNvbG9yICMyNDI1ODIKICAgICAgICAgICAgfQogICAgICAgICAgICByZWxhdGlvbnNoaXAgInN5bmMtb25lLXdheSIgewogICAgICAgICAgICAgICAgdGhpY2tuZXNzIDIKICAgICAgICAgICAgICAgIHN0eWxlIHNvbGlkCiAgICAgICAgICAgICAgICBjb2xvciAjMDAwMEZGCiAgICAgICAgICAgIH0KICAgICAgICAgICAgcmVsYXRpb25zaGlwICJzeW5jLXR3by13YXkiIHsKICAgICAgICAgICAgICAgIHRoaWNrbmVzcyAyCiAgICAgICAgICAgICAgICBzdHlsZSBzb2xpZAogICAgICAgICAgICAgICAgY29sb3IgIzU1M0Q2NwogICAgICAgICAgICB9CiAgICAgICAgICAgIHJlbGF0aW9uc2hpcCAianNvbi1vdmVyLW1vbmdvZGItd2lyZS1wcm90b2NvbCIgewogICAgICAgICAgICAgICAgdGhpY2tuZXNzIDIKICAgICAgICAgICAgICAgIHN0eWxlIGRvdHRlZAogICAgICAgICAgICAgICAgY29sb3IgI0Y2NEM3MgogICAgICAgICAgICB9CiAgICAgICAgICAgIHJlbGF0aW9uc2hpcCAiamRiYy1kcml2ZXIiIHsKICAgICAgICAgICAgICAgIHRoaWNrbmVzcyAyCiAgICAgICAgICAgICAgICBzdHlsZSBkb3R0ZWQKICAgICAgICAgICAgICAgIGNvbG9yICNGNjRDNzIKICAgICAgICAgICAgfQogICAgICAgIH0KCiAgICB9Cn0="
   },
   "views" : {
     "componentViews" : [ {
@@ -469,7 +469,7 @@
     } ],
     "configuration" : {
       "branding" : { },
-      "lastSavedView" : "Container-001",
+      "lastSavedView" : "Component-003",
       "metadataSymbols" : "SquareBrackets",
       "styles" : {
         "elements" : [ {

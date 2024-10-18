@@ -12,7 +12,7 @@ multi line
 # single line
 // single line
 
-workspace "Software Architecture: The Hard Parts (Fairy Tale Saga)" "Fairy Tale Saga" {
+workspace "Software Architecture: The Hard Parts (Parallel Saga)" "Parallel Saga" {
     !identifiers flat
     !impliedRelationships true
    #!include <file|directory|url>
@@ -83,7 +83,7 @@ workspace "Software Architecture: The Hard Parts (Fairy Tale Saga)" "Fairy Tale 
                 }
             }
             orchestrator = container "Orchestrator" {
-                description "Coordinates the workflow, maintains atomic consistency"
+                description "Coordinates the workflow, assumes eventual consistency"
                 technology "Spring Ecosystem"
                 tags "tag"
                 perspectives {
