@@ -85,7 +85,7 @@ workspace "Software Architecture: The Hard Parts (Epic Saga)" "Epic Saga" {
                 }
             }
             orchestrator = container "Orchestrator" {
-                description "Coordinates the workflow"
+                description "Coordinates the workflow, maintains atomic consistency"
                 technology "Spring Ecosystem"
                 tags "tag"
                 perspectives {
