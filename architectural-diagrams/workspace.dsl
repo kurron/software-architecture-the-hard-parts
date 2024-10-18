@@ -83,20 +83,20 @@ workspace "Software Architecture: The Hard Parts (Fairy Tale Saga)" "Fairy Tale 
                 }
             }
             orchestrator = container "Orchestrator" {
-                description "Coordinates the workflow, assumes eventual consistency"
+                description "Coordinates the workflow, maintains atomic consistency"
                 technology "Spring Ecosystem"
                 tags "tag"
                 perspectives {
                 }
                 penny -> this "purchase products" "JSON over HTTPS" "sync-one-way" {
                 }
-                this -> orderPlacementService "accept the order" "JSON over HTTPS" "sync-one-way" {
+                this -> orderPlacementService "accept the order" "JSON over AMQP" "async-one-way" {
                 }
-                this -> paymentService "process the payment" "JSON over HTTPS" "sync-one-way" {
+                this -> paymentService "process the payment" "JSON over AMQP" "async-one-way" {
                 }
-                this -> fulfillmentService "ship the order" "JSON over HTTPS" "sync-one-way" {
+                this -> fulfillmentService "ship the order" "JSON over AMQP" "async-one-way" {
                 }
-                this -> emailService "send the order status" "JSON over HTTPS" "sync-one-way" {
+                this -> emailService "send the order status" "JSON over AMQP" "async-one-way" {
                 }
                 component "Database" {
                     description "Private state"
