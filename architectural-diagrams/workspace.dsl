@@ -45,6 +45,12 @@ workspace "Software Architecture: The Hard Parts (Epic Saga)" "Phone Tag Saga" {
                         tag "happy-path"
                     }
                 }
+                component "Database" {
+                    description "Private state"
+                    technology "PostgreSQL"
+                    perspectives {
+                    }
+                }
             }
             fulfillmentService = container "Fulfillment Service" {
                 description "Ships orders"
@@ -59,6 +65,12 @@ workspace "Software Architecture: The Hard Parts (Epic Saga)" "Phone Tag Saga" {
                     }
                     this -> emailService "send the order status" "JSON over AMQP" "async-one-way" {
                         tag "happy-path"
+                    }
+                }
+                component "Database" {
+                    description "Private state"
+                    technology "PostgreSQL"
+                    perspectives {
                     }
                 }
             }
@@ -77,6 +89,12 @@ workspace "Software Architecture: The Hard Parts (Epic Saga)" "Phone Tag Saga" {
                         tag "happy-path"
                     }
                 }
+                component "Database" {
+                    description "Private state"
+                    technology "PostgreSQL"
+                    perspectives {
+                    }
+                }
             }
             orderPlacementService = container "Order Management Service" {
                 description "Accepts orders"
@@ -85,7 +103,7 @@ workspace "Software Architecture: The Hard Parts (Epic Saga)" "Phone Tag Saga" {
                 perspectives {
                 }
                 component "Order Gateway" {
-                    description "Manages communication with Order Placement Service"
+                    description "Accepts customer orders"
                     technology "JSON over HTTP"
                     perspectives {
                     }
@@ -100,6 +118,12 @@ workspace "Software Architecture: The Hard Parts (Epic Saga)" "Phone Tag Saga" {
                     }
                     this -> paymentService "process the payment" "JSON over AMQP" "async-one-way" {
                         tag "happy-path"
+                    }
+                }
+                component "Database" {
+                    description "Private state"
+                    technology "PostgreSQL"
+                    perspectives {
                     }
                 }
             }
