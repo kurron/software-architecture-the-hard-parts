@@ -41,9 +41,6 @@ workspace "Software Architecture: The Hard Parts (Phone Tag Saga)" "Phone Tag Sa
                     technology "SMTP"
                     perspectives {
                     }
-                    this -> penny "send the order status" "SMTP" "async-one-way" {
-                        tag "happy-path"
-                    }
                 }
                 component "Database" {
                     description "Private state"
@@ -60,10 +57,10 @@ workspace "Software Architecture: The Hard Parts (Phone Tag Saga)" "Phone Tag Sa
                 }
                 component "E-mail Gateway" {
                     description "Manages communication with E-mail Service"
-                    technology "JSON over AMQP"
+                    technology "JSON over HTTPS"
                     perspectives {
                     }
-                    this -> emailService "send the order status" "JSON over AMQP" "async-one-way" {
+                    this -> emailService "send the order status" "JSON over HTTPS" "sync-one-way" {
                         tag "happy-path"
                     }
                 }
@@ -82,10 +79,10 @@ workspace "Software Architecture: The Hard Parts (Phone Tag Saga)" "Phone Tag Sa
                 }
                 component "Fulfillment Gateway" {
                     description "Manages communication with Fulfillment Service"
-                    technology "JSON over AMQP"
+                    technology "JSON over HTTPS"
                     perspectives {
                     }
-                    this -> fulfillmentService "ship the order" "JSON over AMQP" "async-one-way" {
+                    this -> fulfillmentService "ship the order" "JSON over HTTPS" "sync-one-way" {
                         tag "happy-path"
                     }
                 }
@@ -102,21 +99,37 @@ workspace "Software Architecture: The Hard Parts (Phone Tag Saga)" "Phone Tag Sa
                 tags "tag"
                 perspectives {
                 }
-                component "Order Gateway" {
-                    description "Accepts customer orders"
-                    technology "JSON over HTTP"
+                component "Payment Gateway" {
+                    description "Manages communication with Payment Service"
+                    technology "JSON over HTTPS"
                     perspectives {
                     }
-                    penny -> this "purchase products" "JSON over HTTPS" "sync-one-way" {
+                    this -> paymentService "process the payment" "JSON over HTTPS" "sync-one-way" {
                         tag "happy-path"
                     }
                 }
-                component "Payment Gateway" {
-                    description "Manages communication with Payment Service"
-                    technology "JSON over AMQP"
+                component "Database" {
+                    description "Private state"
+                    technology "PostgreSQL"
                     perspectives {
                     }
-                    this -> paymentService "process the payment" "JSON over AMQP" "async-one-way" {
+                }
+            }
+            container "Front Controller" {
+                description "Accepts orders"
+                technology "Spring Ecosystem"
+                tags "tag"
+                perspectives {
+                }
+                penny -> this "purchase products" "JSON over HTTPS" "sync-one-way" {
+                    tag "happy-path"
+                }
+                component "Order Gateway" {
+                    description "Starts the workflow"
+                    technology "JSON over HTTPS"
+                    perspectives {
+                    }
+                    this -> orderPlacementService "process the order" "JSON over HTTPS" "sync-one-way" {
                         tag "happy-path"
                     }
                 }
