@@ -12,7 +12,7 @@ multi line
 # single line
 // single line
 
-workspace "Software Architecture: The Hard Parts (Epic Saga)" "Epic Saga" {
+workspace "Software Architecture: The Hard Parts (Epic Saga)" "Phone Tag Saga" {
     !identifiers flat
     !impliedRelationships true
    #!include <file|directory|url>
@@ -30,18 +30,20 @@ workspace "Software Architecture: The Hard Parts (Epic Saga)" "Epic Saga" {
             description "Online Buy More storefront"
             perspectives {
             }
-            orderPlacementService = container "Order Management Service" {
-                description "Accepts orders"
+            emailService = container "E-mail Service" {
+                description "E-mail customers"
                 technology "Spring Ecosystem"
                 tags "tag"
                 perspectives {
                 }
-            }
-            paymentService = container "Payment Service" {
-                description "Process payments"
-                technology "Spring Ecosystem"
-                tags "tag"
-                perspectives {
+                component "E-mail Gateway" {
+                    description "Manages communication with public E-mail Services"
+                    technology "SMTP"
+                    perspectives {
+                    }
+                    this -> penny "send the order status" "SMTP" "async-one-way" {
+                        tag "happy-path"
+                    }
                 }
             }
             fulfillmentService = container "Fulfillment Service" {
@@ -50,34 +52,54 @@ workspace "Software Architecture: The Hard Parts (Epic Saga)" "Epic Saga" {
                 tags "tag"
                 perspectives {
                 }
-            }
-            emailService = container "E-mail Service" {
-                description "E-mail customers"
-                technology "Spring Ecosystem"
-                tags "tag"
-                perspectives {
-                }
-            }
-            orchestrator = container "Orchestrator" {
-                description "Coordinates the workflow"
-                technology "Spring Ecosystem"
-                tags "tag"
-                perspectives {
-                }
-                penny -> this "purchase products" "JSON over HTTPS" "sync-one-way" {
-                }
-                this -> orderPlacementService "accept the order" "JSON over HTTPS" "sync-one-way" {
-                }
-                this -> paymentService "process the payment" "JSON over HTTPS" "sync-one-way" {
-                }
-                this -> fulfillmentService "ship the order" "JSON over HTTPS" "sync-one-way" {
-                }
-                this -> emailService "send the order status" "JSON over HTTPS" "sync-one-way" {
-                }
-                component "Some service detail" {
-                    description "Some service detail"
-                    technology "foo,bar"
+                component "E-mail Gateway" {
+                    description "Manages communication with E-mail Service"
+                    technology "JSON over AMQP"
                     perspectives {
+                    }
+                    this -> emailService "send the order status" "JSON over AMQP" "async-one-way" {
+                        tag "happy-path"
+                    }
+                }
+            }
+            paymentService = container "Payment Service" {
+                description "Process payments"
+                technology "Spring Ecosystem"
+                tags "tag"
+                perspectives {
+                }
+                component "Fulfillment Gateway" {
+                    description "Manages communication with Fulfillment Service"
+                    technology "JSON over AMQP"
+                    perspectives {
+                    }
+                    this -> fulfillmentService "ship the order" "JSON over AMQP" "async-one-way" {
+                        tag "happy-path"
+                    }
+                }
+            }
+            orderPlacementService = container "Order Management Service" {
+                description "Accepts orders"
+                technology "Spring Ecosystem"
+                tags "tag"
+                perspectives {
+                }
+                component "Order Gateway" {
+                    description "Manages communication with Order Placement Service"
+                    technology "JSON over HTTP"
+                    perspectives {
+                    }
+                    penny -> this "purchase products" "JSON over HTTPS" "sync-one-way" {
+                        tag "happy-path"
+                    }
+                }
+                component "Payment Gateway" {
+                    description "Manages communication with Payment Service"
+                    technology "JSON over AMQP"
+                    perspectives {
+                    }
+                    this -> paymentService "process the payment" "JSON over AMQP" "async-one-way" {
+                        tag "happy-path"
                     }
                 }
             }
@@ -132,22 +154,16 @@ workspace "Software Architecture: The Hard Parts (Epic Saga)" "Epic Saga" {
                 style solid
                 color #0000FF
             }
+            relationship "sync-one-way-sad" {
+                thickness 2
+                style solid
+                color #FF0000
+            }
             relationship "sync-two-way" {
                 thickness 2
                 style solid
                 color #553D67
             }
-            relationship "json-over-mongodb-wire-protocol" {
-                thickness 2
-                style dotted
-                color #F64C72
-            }
-            relationship "jdbc-driver" {
-                thickness 2
-                style dotted
-                color #F64C72
-            }
         }
-
     }
 }
