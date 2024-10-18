@@ -36,6 +36,12 @@ workspace "Software Architecture: The Hard Parts (Epic Saga)" "Epic Saga" {
                 tags "tag"
                 perspectives {
                 }
+                component "Database" {
+                    description "Private state"
+                    technology "PostgreSQL"
+                    perspectives {
+                    }
+                }
             }
             paymentService = container "Payment Service" {
                 description "Process payments"
@@ -43,12 +49,24 @@ workspace "Software Architecture: The Hard Parts (Epic Saga)" "Epic Saga" {
                 tags "tag"
                 perspectives {
                 }
+                component "Database" {
+                    description "Private state"
+                    technology "PostgreSQL"
+                    perspectives {
+                    }
+                }
             }
             fulfillmentService = container "Fulfillment Service" {
                 description "Ships orders"
                 technology "Spring Ecosystem"
                 tags "tag"
                 perspectives {
+                }
+                component "Database" {
+                    description "Private state"
+                    technology "PostgreSQL"
+                    perspectives {
+                    }
                 }
             }
             emailService = container "E-mail Service" {
@@ -58,6 +76,12 @@ workspace "Software Architecture: The Hard Parts (Epic Saga)" "Epic Saga" {
                 perspectives {
                 }
                 this -> penny "send the order status" "SMTP" "async-one-way" {
+                }
+                component "Database" {
+                    description "Private state"
+                    technology "PostgreSQL"
+                    perspectives {
+                    }
                 }
             }
             orchestrator = container "Orchestrator" {
@@ -76,9 +100,9 @@ workspace "Software Architecture: The Hard Parts (Epic Saga)" "Epic Saga" {
                 }
                 this -> emailService "send the order status" "JSON over HTTPS" "sync-one-way" {
                 }
-                component "Some service detail" {
-                    description "Some service detail"
-                    technology "foo,bar"
+                component "Database" {
+                    description "Private state"
+                    technology "PostgreSQL"
                     perspectives {
                     }
                 }
