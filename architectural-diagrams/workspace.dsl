@@ -12,7 +12,7 @@ multi line
 # single line
 // single line
 
-workspace "Software Architecture: The Hard Parts (Epic Saga)" "Phone Tag Saga" {
+workspace "Software Architecture: The Hard Parts (Phone Tag Saga)" "Phone Tag Saga" {
     !identifiers flat
     !impliedRelationships true
    #!include <file|directory|url>
