@@ -12,7 +12,7 @@ multi line
 # single line
 // single line
 
-workspace "Software Architecture: The Hard Parts (Phone Tag Saga)" "Phone Tag Saga" {
+workspace "Software Architecture: The Hard Parts (Anthology Saga)" "Anthology Saga" {
     !identifiers flat
     !impliedRelationships true
    #!include <file|directory|url>
@@ -57,10 +57,10 @@ workspace "Software Architecture: The Hard Parts (Phone Tag Saga)" "Phone Tag Sa
                 }
                 component "E-mail Gateway" {
                     description "Manages communication with E-mail Service"
-                    technology "JSON over HTTPS"
+                    technology "JSON over AMQP"
                     perspectives {
                     }
-                    this -> emailService "send the order status" "JSON over HTTPS" "sync-one-way" {
+                    this -> emailService "send the order status" "JSON over AMQP" "async-one-way" {
                         tag "happy-path"
                     }
                 }
@@ -79,10 +79,10 @@ workspace "Software Architecture: The Hard Parts (Phone Tag Saga)" "Phone Tag Sa
                 }
                 component "Fulfillment Gateway" {
                     description "Manages communication with Fulfillment Service"
-                    technology "JSON over HTTPS"
+                    technology "JSON over AMQP"
                     perspectives {
                     }
-                    this -> fulfillmentService "ship the order" "JSON over HTTPS" "sync-one-way" {
+                    this -> fulfillmentService "ship the order" "JSON over AMQP" "async-one-way" {
                         tag "happy-path"
                     }
                 }
@@ -101,10 +101,10 @@ workspace "Software Architecture: The Hard Parts (Phone Tag Saga)" "Phone Tag Sa
                 }
                 component "Payment Gateway" {
                     description "Manages communication with Payment Service"
-                    technology "JSON over HTTPS"
+                    technology "JSON over AMQP"
                     perspectives {
                     }
-                    this -> paymentService "process the payment" "JSON over HTTPS" "sync-one-way" {
+                    this -> paymentService "process the payment" "JSON over AMQP" "async-one-way" {
                         tag "happy-path"
                     }
                 }
@@ -126,10 +126,10 @@ workspace "Software Architecture: The Hard Parts (Phone Tag Saga)" "Phone Tag Sa
                 }
                 component "Order Gateway" {
                     description "Starts the workflow"
-                    technology "JSON over HTTPS"
+                    technology "JSON over AMQP"
                     perspectives {
                     }
-                    this -> orderPlacementService "process the order" "JSON over HTTPS" "sync-one-way" {
+                    this -> orderPlacementService "process the order" "JSON over AMQP" "async-one-way" {
                         tag "happy-path"
                     }
                 }
