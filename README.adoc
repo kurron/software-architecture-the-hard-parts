@@ -9,7 +9,7 @@ endif::[]
 == Overview
 This project are simple implementations of the eight transaction saga pattern described in link:/[Software Architecture: The Hard Parts]. I've done this to help me better understand the trade-offs of each type. You'll find a branch for each implementation, where the branch name mirrors the pattern name, e.g. `phone-tag`.
 
-[cols="4*"]
+[cols="5*"]
 |===
 | Pattern Name | Communication | Consistency | Coordination | Branch Name |
 
