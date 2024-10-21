@@ -11,7 +11,7 @@ This project are simple implementations of the eight transaction saga pattern de
 
 [cols="4*"]
 |===
-| Pattern Name | Communication | Consistency | Coordination | Branch Name
+| Pattern Name | Communication | Consistency | Coordination | Branch Name |
 
 | Epic Saga
 | Synchronous
