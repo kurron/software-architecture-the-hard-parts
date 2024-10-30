@@ -63,6 +63,36 @@ This project are simple implementations of the eight transaction saga pattern de
 
 |===
 
+[cols="2*"]
+|===
+|Architectural Style|Architectural Family
+
+| Layered
+| Monolithic
+
+| Pipeline
+| Monolithic
+
+| Microkernel
+| Monolithic
+
+| Service-base
+| Distributed
+
+| Event-driven
+| Distributed
+
+| Space-based
+| Distributed
+
+| Service-oriented
+| Distributed
+
+| Microservices
+| Distributed
+
+|===
+
 == Prerequisites
 * JDK 21 or greater
 
