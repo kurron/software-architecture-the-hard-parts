@@ -9,9 +9,9 @@ endif::[]
 == Overview
 This project are simple implementations of the eight transaction saga pattern described in link:/[Software Architecture: The Hard Parts]. I've done this to help me better understand the trade-offs of each type. You'll find a branch for each implementation, where the branch name mirrors the pattern name, e.g. `phone-tag`.
 
-[cols="5*"]
+[cols="4*"]
 |===
-|Pattern Name|Communication|Consistency|Coordination|Branch Name
+| Pattern Name | Communication | Consistency | Coordination | Branch Name
 
 | Epic Saga
 | Synchronous
@@ -63,36 +63,6 @@ This project are simple implementations of the eight transaction saga pattern de
 
 |===
 
-[cols="2*"]
-|===
-|Architectural Style|Architectural Family
-
-| Layered
-| Monolithic
-
-| Pipeline
-| Monolithic
-
-| Microkernel
-| Monolithic
-
-| Service-base
-| Distributed
-
-| Event-driven
-| Distributed
-
-| Space-based
-| Distributed
-
-| Service-oriented
-| Distributed
-
-| Microservices
-| Distributed
-
-|===
-
 == Prerequisites
 * JDK 21 or greater
 
@@ -111,7 +81,7 @@ This project are simple implementations of the eight transaction saga pattern de
 * email service
 
 === Architectural Diagrams
-//`docker run --pull always --interactive --tty --rm --name structurizr --publish 8080:8080 --env STRUCTURIZR_WORKSPACE_PATH=architectural-diagrams --volume $(pwd):/usr/local/structurizr structurizr/lite:latest`
+``
 
 === Guidebook
 // Details about this project are contained in the link:guidebook/guidebook.adoc[guidebook] and should be considered mandatory reading prior to contributing to this project.
