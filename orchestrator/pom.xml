@@ -3,17 +3,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.4</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<groupId>org.kurron.hard.parts</groupId>
+		<artifactId>software-architecture-the-hard-parts</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<packaging>pom</packaging>
-	<groupId>org.kurron.hard.parts</groupId>
-	<artifactId>software-architecture-the-hard-parts</artifactId>
+	<artifactId>orchestrator</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Software Architecture: The Hard Parts</name>
-	<description>Showcasing the different transactional sagas</description>
+	<name>Workflow Orchestration</name>
+	<description>Orchestrates the workflow of purchasing a product</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -32,7 +29,6 @@
 		<kotlin.version>1.9.25</kotlin.version>
 		<spring-cloud.version>2023.0.3</spring-cloud.version>
 		<spring-shell.version>3.3.3</spring-shell.version>
-		<spring-statemachine.version>4.0.0</spring-statemachine.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -160,13 +156,6 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-			<dependency>
-				<groupId>org.springframework.statemachine</groupId>
-				<artifactId>spring-statemachine-bom</artifactId>
-				<version>${spring-statemachine.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -200,11 +189,4 @@
 		</plugins>
 	</build>
 
-	<modules>
-		<module>orchestrator</module>
-		<module>order-placement</module>
-		<module>payment</module>
-		<module>fulfillment</module>
-		<module>email</module>
-	</modules>
 </project>
