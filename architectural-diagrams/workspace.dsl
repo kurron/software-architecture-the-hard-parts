@@ -30,17 +30,50 @@ workspace "Software Architecture: The Hard Parts (Epic Saga)" "Epic Saga" {
             description "Online Buy More storefront"
             perspectives {
             }
-            orderPlacementService = container "Order Management Service" {
+            database = container "Database" {
+                description "Shared persistence"
+                technology "PostgreSQL"
+                tags "tag"
+                perspectives {
+                }
+                orderPlacementSchema = component "Order Placement Schema" {
+                    description "Order state"
+                    technology "PostgreSQL"
+                    perspectives {
+                    }
+                }
+                paymentSchema = component "Payment Schema" {
+                    description "Payment state"
+                    technology "PostgreSQL"
+                    perspectives {
+                    }
+                }
+                fulfillmentSchema = component "Fulfillment Schema" {
+                    description "Fulfillment state"
+                    technology "PostgreSQL"
+                    perspectives {
+                    }
+                }
+                emailSchema = component "E-mail Schema" {
+                    description "E-mail state"
+                    technology "PostgreSQL"
+                    perspectives {
+                    }
+                }
+                orchestrationSchema = component "Orchestration Schema" {
+                    description "Orchestration state"
+                    technology "PostgreSQL"
+                    perspectives {
+                    }
+                }
+            }
+            orderPlacementService = container "Order Placement Service" {
                 description "Accepts orders"
                 technology "Spring Ecosystem"
                 tags "tag"
                 perspectives {
                 }
-                component "Database" {
-                    description "Private state"
-                    technology "PostgreSQL"
-                    perspectives {
-                    }
+                this -> orderPlacementSchema "order data" "Spring Data JDBC" "sync-one-way" {
                 }
             }
             paymentService = container "Payment Service" {
@@ -49,11 +82,7 @@ workspace "Software Architecture: The Hard Parts (Epic Saga)" "Epic Saga" {
                 tags "tag"
                 perspectives {
                 }
-                component "Database" {
-                    description "Private state"
-                    technology "PostgreSQL"
-                    perspectives {
-                    }
+                this -> paymentSchema "payment data" "Spring Data JDBC" "sync-one-way" {
                 }
             }
             fulfillmentService = container "Fulfillment Service" {
@@ -62,11 +91,7 @@ workspace "Software Architecture: The Hard Parts (Epic Saga)" "Epic Saga" {
                 tags "tag"
                 perspectives {
                 }
-                component "Database" {
-                    description "Private state"
-                    technology "PostgreSQL"
-                    perspectives {
-                    }
+                this -> fulfillmentSchema "fulfillment data" "Spring Data JDBC" "sync-one-way" {
                 }
             }
             emailService = container "E-mail Service" {
@@ -75,11 +100,7 @@ workspace "Software Architecture: The Hard Parts (Epic Saga)" "Epic Saga" {
                 tags "tag"
                 perspectives {
                 }
-                component "Database" {
-                    description "Private state"
-                    technology "PostgreSQL"
-                    perspectives {
-                    }
+                this -> emailSchema "e-mail data" "Spring Data JDBC" "sync-one-way" {
                 }
             }
             orchestrator = container "Orchestrator" {
@@ -98,11 +119,7 @@ workspace "Software Architecture: The Hard Parts (Epic Saga)" "Epic Saga" {
                 }
                 this -> emailService "send the order status" "JSON over HTTPS" "sync-one-way" {
                 }
-                component "Database" {
-                    description "Private state"
-                    technology "PostgreSQL"
-                    perspectives {
-                    }
+                this -> orchestrationSchema "orchestration data" "Spring Data JDBC" "sync-one-way" {
                 }
             }
        }
