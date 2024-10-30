@@ -73,7 +73,21 @@ workspace "Software Architecture: The Hard Parts (Epic Saga)" "Epic Saga" {
                 tags "tag"
                 perspectives {
                 }
-                this -> orderPlacementSchema "order data" "Spring Data JDBC" "sync-one-way" {
+                orderPlacementAPI = component "Order Placement API" {
+                    description "Service API"
+                    technology "Spring HATEOAS"
+                    perspectives {
+                    }
+                }
+                component "Order Placement Persistence" {
+                    description "Persist Service State"
+                    technology "Spring Data JDBC"
+                    perspectives {
+                    }
+                    orderPlacementAPI -> this "order data" "Spring Data JDBC" "sync-one-way" {
+                    }
+                    this -> orderPlacementSchema "order data" "Spring Data JDBC" "sync-one-way" {
+                    }
                 }
             }
             paymentService = container "Payment Service" {
@@ -82,7 +96,21 @@ workspace "Software Architecture: The Hard Parts (Epic Saga)" "Epic Saga" {
                 tags "tag"
                 perspectives {
                 }
-                this -> paymentSchema "payment data" "Spring Data JDBC" "sync-one-way" {
+                paymentAPI = component "Payment API" {
+                    description "Service API"
+                    technology "Spring HATEOAS"
+                    perspectives {
+                    }
+                }
+                component "Payment Persistence" {
+                    description "Persist Service State"
+                    technology "Spring Data JDBC"
+                    perspectives {
+                    }
+                    paymentAPI -> this "payment data" "Spring Data JDBC" "sync-one-way" {
+                    }
+                    this -> paymentSchema "payment data" "Spring Data JDBC" "sync-one-way" {
+                    }
                 }
             }
             fulfillmentService = container "Fulfillment Service" {
@@ -91,7 +119,21 @@ workspace "Software Architecture: The Hard Parts (Epic Saga)" "Epic Saga" {
                 tags "tag"
                 perspectives {
                 }
-                this -> fulfillmentSchema "fulfillment data" "Spring Data JDBC" "sync-one-way" {
+                fulfillmentAPI = component "Fulfillment API" {
+                    description "Service API"
+                    technology "Spring HATEOAS"
+                    perspectives {
+                    }
+                }
+                component "Fulfillment Persistence" {
+                    description "Persist Service State"
+                    technology "Spring Data JDBC"
+                    perspectives {
+                    }
+                    fulfillmentAPI -> this "fulfillment data" "Spring Data JDBC" "sync-one-way" {
+                    }
+                    this -> fulfillmentSchema "fulfillment data" "Spring Data JDBC" "sync-one-way" {
+                    }
                 }
             }
             emailService = container "E-mail Service" {
@@ -100,7 +142,21 @@ workspace "Software Architecture: The Hard Parts (Epic Saga)" "Epic Saga" {
                 tags "tag"
                 perspectives {
                 }
-                this -> emailSchema "e-mail data" "Spring Data JDBC" "sync-one-way" {
+                emailAPI = component "E-Mail API" {
+                    description "Service API"
+                    technology "Spring HATEOAS"
+                    perspectives {
+                    }
+                }
+                component "E-Mail Persistence" {
+                    description "Persist Service State"
+                    technology "Spring Data JDBC"
+                    perspectives {
+                    }
+                    emailAPI -> this "e-mail data" "Spring Data JDBC" "sync-one-way" {
+                    }
+                    this -> emailSchema "e-mail data" "Spring Data JDBC" "sync-one-way" {
+                    }
                 }
             }
             orchestrator = container "Orchestrator" {
@@ -109,17 +165,39 @@ workspace "Software Architecture: The Hard Parts (Epic Saga)" "Epic Saga" {
                 tags "tag"
                 perspectives {
                 }
-                penny -> this "purchase products" "JSON over HTTPS" "sync-one-way" {
+                orchestratorAPI = component "Orchestrator API" {
+                    description "Service API"
+                    technology "Spring HATEOAS"
+                    perspectives {
+                    }
+                    penny -> this "purchase products" "JSON over HTTPS" "sync-one-way" {
+                    }
                 }
-                this -> orderPlacementService "accept the order" "JSON over HTTPS" "sync-one-way" {
+                serviceGateway = component "Service Gateway" {
+                    description "Service Clients"
+                    technology "Spring HATEOAS"
+                    perspectives {
+                    }
+                    orchestratorAPI -> this "execute workflow" "JSON over HTTPS" "sync-one-way" {
+                    }
+                    this -> orderPlacementAPI "accept the order" "JSON over HTTPS" "sync-one-way" {
+                    }
+                    this -> paymentAPI "process the payment" "JSON over HTTPS" "sync-one-way" {
+                    }
+                    this -> fulfillmentAPI "ship the order" "JSON over HTTPS" "sync-one-way" {
+                    }
+                    this -> emailAPI "send the order status" "JSON over HTTPS" "sync-one-way" {
+                    }
                 }
-                this -> paymentService "process the payment" "JSON over HTTPS" "sync-one-way" {
-                }
-                this -> fulfillmentService "ship the order" "JSON over HTTPS" "sync-one-way" {
-                }
-                this -> emailService "send the order status" "JSON over HTTPS" "sync-one-way" {
-                }
-                this -> orchestrationSchema "orchestration data" "Spring Data JDBC" "sync-one-way" {
+                component "Orchestrator Persistence" {
+                    description "Persist Service State"
+                    technology "Spring Data JDBC"
+                    perspectives {
+                    }
+                    orchestratorAPI -> this "execute workflow" "JSON over HTTPS" "sync-one-way" {
+                    }
+                    this -> orchestrationSchema "orchestration data" "Spring Data JDBC" "sync-one-way" {
+                    }
                 }
             }
        }
