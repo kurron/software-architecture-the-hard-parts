@@ -40,3 +40,8 @@ When possible, we will use a URI as the primary key for objects. Depending on th
 
 ## Consequences
 If we can use stable names for the authority portion of the URI, we should be able to move services around and still have systems find the data they need. One element we have to be keenly aware of is that changing the scheme portion later will be very difficult, if not impossible. If available, an HTTP or GraphQL URI should be preferred over direct database or coordinates. In practical terms, this means that we still use database generated primary keys but return a URL as the ID of the asset.  For example, document `1234` would be exposed to the caller as `http://alpha.test.example.com/user/1234`. If that URI is ever "tugged" on, hyperlinks are provided to other possible operations on the resource.
+
+## Compliance
+Being a learning project, no effort will be made to enforce the use of decision records.
+
+## Notes

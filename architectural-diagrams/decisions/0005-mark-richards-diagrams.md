@@ -11,3 +11,8 @@ Looking at a static diagram, especially when printed on a black and white printe
 
 ## Consequences
 By taking using a simple convention when it comes to line and arrow use, people should more quickly understand what is being diagrammed with less ambiguity.
+
+## Compliance
+Being a learning project, no effort will be made to enforce the use of decision records.
+
+## Notes
