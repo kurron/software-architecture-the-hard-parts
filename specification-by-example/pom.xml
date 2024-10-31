@@ -7,10 +7,10 @@
 		<artifactId>software-architecture-the-hard-parts</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>payment</artifactId>
+	<artifactId>specification-by-example</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Payment Service</name>
-	<description>Process payment for orders</description>
+	<name>Specification by Example</name>
+	<description>Executable specifications, verifying the integrity of the system</description>
 	<url/>
 	<licenses>
 		<license/>

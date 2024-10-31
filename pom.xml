@@ -206,5 +206,6 @@
 		<module>payment</module>
 		<module>fulfillment</module>
 		<module>email</module>
+		<module>specification-by-example</module>
 	</modules>
 </project>
