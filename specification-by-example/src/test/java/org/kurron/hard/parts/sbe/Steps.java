@@ -1,4 +1,4 @@
-package org.kurron.hard.parts.payment;
+package org.kurron.hard.parts.sbe;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;

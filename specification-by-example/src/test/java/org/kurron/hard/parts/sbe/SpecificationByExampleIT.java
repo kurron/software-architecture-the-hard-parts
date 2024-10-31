@@ -1,4 +1,4 @@
-package org.kurron.hard.parts.payment;
+package org.kurron.hard.parts.sbe;
 
 import org.junit.platform.suite.api.IncludeEngines;
 import org.junit.platform.suite.api.SelectClasspathResource;
