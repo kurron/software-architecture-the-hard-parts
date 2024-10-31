@@ -33,6 +33,7 @@
 		<spring-cloud.version>2023.0.3</spring-cloud.version>
 		<spring-shell.version>3.3.3</spring-shell.version>
 		<spring-statemachine.version>4.0.0</spring-statemachine.version>
+		<cucumber.version>7.20.1</cucumber.version>
 	</properties>
 	<dependencies>
 		<dependency>
