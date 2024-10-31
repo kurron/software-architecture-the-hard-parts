@@ -1,4 +1,4 @@
-package org.kurron.hard.parts.payment
+package org.kurron.hard.parts.orchestrator
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

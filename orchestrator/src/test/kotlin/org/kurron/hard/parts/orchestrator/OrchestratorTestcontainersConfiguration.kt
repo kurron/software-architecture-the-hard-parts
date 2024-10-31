@@ -1,4 +1,4 @@
-package org.kurron.hard.parts.payment
+package org.kurron.hard.parts.orchestrator
 
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection

@@ -4,39 +4,46 @@
   "documentation" : {
     "decisions" : [ {
       "content" : "# 1. Record architecture decisions\n\n## Status\nAccepted\n\n## Context\nWe will record the architectural decisions made on this project.\n\n## Decision\nWe will use Architecture Decision Records, as described by Michael Nygard in this article: [Documenting Architecture Decisions](http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-decisions)\n\n## Consequences\nSee Michael Nygard's article, linked above.\n\n## Compliance\nBeing a learning project, no effort will be made to enforce the use of decision records.\n\n## Notes\n\n",
-      "date" : "2024-10-31T14:04:49Z",
+      "date" : "2024-10-31T20:15:44Z",
       "format" : "Markdown",
       "id" : "1",
       "status" : "Accepted",
       "title" : "Record architecture decisions"
     }, {
       "content" : "# 1. Microservices Architecture\n\n## Status\nAccepted\n\n## Context\nIn order to showcase the Epic Saga pattern, we need to provide atomic database consistency of the system.\n\n## Decision\nWe will use a Microservices architectural style to implement the distributed services. The simplest style to achieve atomic consistency would to use a monolithic style, such as a Layered Monolith, but the idea is to experience the trade-offs when using the saga in a distributed architecture. A Service-Oriented architecture was also considered, due to the sharing of a database, but that didn't provide any benefits and introduced potential unwanted coupling at the persistence level. \n\n## Consequences\nEach distributed service will connect to the same database but will use their own schema, keeping the database namespace nice and tidy. Since each domain is implemented in its own process, the Orchestrator will have to issue compensating transactions when dealing with service failures. Fault handling is the most difficult part of this saga type and should provide an excellent learning experience. \n\n## Compliance\nBeing a learning project, no effort will be made to enforce the use of decision records.\n\n## Notes\n",
-      "date" : "2024-10-31T14:04:49Z",
+      "date" : "2024-10-31T20:15:44Z",
       "format" : "Markdown",
       "id" : "2",
       "status" : "Accepted",
       "title" : "Microservices Architecture"
     }, {
       "content" : "# 1. Use Kotlin For Production Code\n\n## Status\nAccepted\n\n## Context\nModern Java has improved the programmer experience but Kotlin, in our opinion, provides a better one.\n\n## Decision\nWe will use [Kotlin](https://kotlinlang.org/) to develop the production modules. Test will use Java, primarily due to some complexity in getting Cucumber and Kotlin to play nicely together.\n\n## Consequences\nKotlin has many features baked into the language that require extra libraries to accomplish in Java, e.g. Lombok. Fewer dependencies means fewer upgrade headaches in the future.\n\n## Compliance\nBeing a learning project, no effort will be made to enforce the use of decision records.\n\n## Notes\n",
-      "date" : "2024-10-31T14:04:49Z",
+      "date" : "2024-10-31T20:15:44Z",
       "format" : "Markdown",
       "id" : "3",
       "status" : "Accepted",
       "title" : "Use Kotlin For Production Code"
     }, {
       "content" : "# 1. Use Explicit Contexts\n\n## Status\nAccepted\n\n## Context\nMichael Nygard has a very interesting idea that should allow system to evolve over time. From his book [Release It!]():\n\n>Suppose your service receives this fragment of JSON inside a request: `{\"item\": \"029292934\"}`\n>\n>How much do we know about the item? Is that string the item itself? Or is it an item identifier? Maybe the field would be better named “itemID.” Supposing that it is an identifier, our service can’t do very much with it. In fact, only four things are possible:\n>\n>1. Pass it through as a token to other services. (This includes returning it to the same caller in the future.)\n>2. Look it up by calling another service.\n>3. Look it up in our own database.\n>4. Discard it.\n>\n>In the first case, we’re just using the “itemID” as a token. We don’t care about the internal structure. In this case it would be a mistake to convert it from string to numeric. We’d be imposing a restriction that doesn’t add any value and will probably need to be changed—with huge disruption—in the future.\n>\n>In the second and third cases, we’re using the “itemID” as something we can resolve to get more information. But there’s a serious problem here. The bare string shown earlier doesn’t tell us who has the authoritative information. If the answer isn’t in our own database, we need to call another service. Which service?\n>\n>This issue is so pervasive that it does not even look like a problem at first. In order to get item information, your service must already know who to call! That’s an implicit dependency.\n>\n>That implicit dependency limits you to working with just the one service provider. If you need to support items from two different “universes,” it’s going to be very disruptive.\n>\n>Suppose instead the initial fragment of JSON looked like this: `{\"itemID\": \"https://example.com/policies/029292934\"}`\n>\n>This URL still works if we just want to use it as an opaque token to pass forward. From one perspective, it’s still just a Unicode string.\n>\n>This URL also still works if we need to resolve it to get more information. But now our service does not have to bake in knowledge of the solitary authority. We can support more than one of them.\n>\n>By the way, using a full URL also makes integration testing easier. We no longer need “test” versions of the other services. We can supply our own test harnesses and use URLs to those instead of the production authorities.\n>\n>This example is all in the context of interservice communication. But making implicit context into explicit context has big benefits inside services as well. If you’ve worked on a Ruby on Rails system, you might have run into difficulty when trying to use multiple relational databases from a single service. That’s because ActiveRecord uses an implicit database connection. This is convenient when there’s just one database, but it becomes a hindrance when you need more than one.\n>\n>Global state is the most insidious form of implicit context. That include configuration parameters. These will slow you down when you need to go from “one” to “more than one” of a collaboration.\n\n## Decision\nWhen possible, we will use a URI as the primary key for objects. Depending on the system in question, it may not be an easily resolvable location and may have to be deconstructed a bit before getting to something readable. For example: `mongodb:read-only-user@mongodb.example.com:5762/some-dataset?_id=9876` probably won't have an available protocol handler, so one must be written.  \n\n## Consequences\nIf we can use stable names for the authority portion of the URI, we should be able to move services around and still have systems find the data they need. One element we have to be keenly aware of is that changing the scheme portion later will be very difficult, if not impossible. If available, an HTTP or GraphQL URI should be preferred over direct database or coordinates. In practical terms, this means that we still use database generated primary keys but return a URL as the ID of the asset.  For example, document `1234` would be exposed to the caller as `http://alpha.test.example.com/user/1234`. If that URI is ever \"tugged\" on, hyperlinks are provided to other possible operations on the resource.\n\n## Compliance\nBeing a learning project, no effort will be made to enforce the use of decision records.\n\n## Notes\n",
-      "date" : "2024-10-31T14:04:49Z",
+      "date" : "2024-10-31T20:15:44Z",
       "format" : "Markdown",
       "id" : "4",
       "status" : "Accepted",
       "title" : "Use Explicit Contexts"
     }, {
       "content" : "# 1. Use Mark Richards' \"arrow\" Notation\n\n## Status\nAccepted\n\n## Context\nLooking at a static diagram, especially when printed on a black and white printer, it can be difficult to quickly grasp how each component interacts with others. In particular, the use of arrows and lines are often ambiguous and/or misleading, decreasing the understandability of the diagram.\n\n## Decision\n[Mark Richards](https://developertoarchitect.com/lessons/) has a simple set of conventions when it comes to lines and arrows that we will incorporate into our C4 views: [Lesson 94 - Guidelines for Architecture Diagrams](https://developertoarchitect.com/lessons/lesson94.html) and [Lesson 95 - Guidelines for Architecture Diagrams Revisited](https://developertoarchitect.com/lessons/lesson95.html).\n\n## Consequences\nBy taking using a simple convention when it comes to line and arrow use, people should more quickly understand what is being diagrammed with less ambiguity.\n\n## Compliance\nBeing a learning project, no effort will be made to enforce the use of decision records.\n\n## Notes\n",
-      "date" : "2024-10-31T14:04:49Z",
+      "date" : "2024-10-31T20:15:44Z",
       "format" : "Markdown",
       "id" : "5",
       "status" : "Accepted",
       "title" : "Use Mark Richards' \"arrow\" Notation"
+    }, {
+      "content" : "# 1. Use Request State Management to simulate the Isolated portion of ACID\n\n## Status\nAccepted\n\n## Context\nThe Epic Saga requires that we provide atomic consistency across our distributed transaction. Not an easy feat to accomplish.\n\n## Decision\nIn [Lesson 176 - Compensating Updates Revisited](https://youtu.be/_lZ7JJVNKcc?si=bXe7J52YtHakjFND), Mark Richards provides an alternative to using compensating operations to keep the system in a consistent state.\n\n## Consequences\nEach service will be required to use [Apache Ignite](https://ignite.apache.org/), probably behind Spring Boot's cache abstraction, to keep the current state of the in-flight operation's state current. This does a couple things, including allowing the workflow to resume from a failed step if some self-healing has occurred.\n\n## Compliance\nBeing a learning project, no effort will be made to enforce the use of decision records.\n\n## Notes\n",
+      "date" : "2024-10-31T20:15:44Z",
+      "format" : "Markdown",
+      "id" : "6",
+      "status" : "Accepted",
+      "title" : "Use Request State Management to simulate the Isolated portion of ACID"
     } ],
     "sections" : [ {
       "content" : "== Context\nBuyMore online is an ecommerce site, selling mostly widgets. The workflow is typical of other sites where, after the purchase is fulfilled, an e-mail notification is sent to the customer. It is very important that any service failures during the workflow get reverted as quickly as possible. We don't want an angry customer because we charged her for something that never shipped!\n\nWARNING: figure out how to embed the context diagram",
@@ -125,8 +132,7 @@
     } ]
   },
   "id" : 1,
-  "lastModifiedAgent" : "structurizr-ui",
-  "lastModifiedDate" : "2024-10-31T14:13:54Z",
+  "lastModifiedDate" : "2024-10-31T20:15:44Z",
   "model" : {
     "people" : [ {
       "description" : "Purchasing customer",
@@ -141,7 +147,7 @@
         "destinationId" : "29",
         "id" : "30",
         "properties" : {
-          "structurizr.dsl.identifier" : "c7d679d3-85cd-45ef-9009-1acd5c0d59aa"
+          "structurizr.dsl.identifier" : "47592ed5-d046-402d-a4b7-f457d3dfc5cb"
         },
         "sourceId" : "1",
         "tags" : "Relationship,sync-one-way",
@@ -170,7 +176,7 @@
       "location" : "Unspecified",
       "name" : "Buy Less",
       "properties" : {
-        "structurizr.dsl.identifier" : "f382e878-b45a-4f3c-8369-37f0dfc150d5"
+        "structurizr.dsl.identifier" : "762daffb-068d-431a-830a-237753c952fd"
       },
       "tags" : "Element,Software System"
     }, {
@@ -188,7 +194,7 @@
             "destinationId" : "7",
             "id" : "8",
             "properties" : {
-              "structurizr.dsl.identifier" : "832fe050-b806-4111-ab24-5dbc9607a9f5"
+              "structurizr.dsl.identifier" : "699eed81-7ce5-4408-8ccf-39873b1f2d76"
             },
             "sourceId" : "5",
             "tags" : "Relationship,sync-one-way",
@@ -212,14 +218,14 @@
           "id" : "7",
           "name" : "Order Placement Persistence",
           "properties" : {
-            "structurizr.dsl.identifier" : "050087ab-89d5-4a6a-b5a8-e8f28c4d71c2"
+            "structurizr.dsl.identifier" : "089b8c67-0b77-44bc-bffc-04ad37dd8fd0"
           },
           "relationships" : [ {
             "description" : "order data",
             "destinationId" : "6",
             "id" : "9",
             "properties" : {
-              "structurizr.dsl.identifier" : "74611c08-3471-4ab0-bbb0-7482739dc0db"
+              "structurizr.dsl.identifier" : "9cb97e25-c73b-4e36-b5f7-bcc7f11ef1a2"
             },
             "sourceId" : "7",
             "tags" : "Relationship,sync-one-way",
@@ -251,7 +257,7 @@
             "destinationId" : "13",
             "id" : "14",
             "properties" : {
-              "structurizr.dsl.identifier" : "773055cf-2d60-41fb-8d26-58b8d6ae1d39"
+              "structurizr.dsl.identifier" : "da0bf0b0-1700-4039-b7aa-9e2ee97c2a0b"
             },
             "sourceId" : "11",
             "tags" : "Relationship,sync-one-way",
@@ -275,14 +281,14 @@
           "id" : "13",
           "name" : "Payment Persistence",
           "properties" : {
-            "structurizr.dsl.identifier" : "1b1c4530-ba89-4c3c-a30e-9818b99073f7"
+            "structurizr.dsl.identifier" : "282df596-5e91-4007-a17e-12f59f4a243b"
           },
           "relationships" : [ {
             "description" : "payment data",
             "destinationId" : "12",
             "id" : "15",
             "properties" : {
-              "structurizr.dsl.identifier" : "f394656f-1204-4547-b17a-300fbcbe478a"
+              "structurizr.dsl.identifier" : "98d4b490-373a-4431-863c-5e111e02bf3e"
             },
             "sourceId" : "13",
             "tags" : "Relationship,sync-one-way",
@@ -314,7 +320,7 @@
             "destinationId" : "19",
             "id" : "20",
             "properties" : {
-              "structurizr.dsl.identifier" : "97eec91f-4eb9-4ca5-83d2-985d2ee2b396"
+              "structurizr.dsl.identifier" : "d4e04b04-364b-4d36-99df-f52257f4942d"
             },
             "sourceId" : "17",
             "tags" : "Relationship,sync-one-way",
@@ -338,14 +344,14 @@
           "id" : "19",
           "name" : "Fulfillment Persistence",
           "properties" : {
-            "structurizr.dsl.identifier" : "e2db4d3d-5912-493c-b298-d6c7bc39d212"
+            "structurizr.dsl.identifier" : "f1390bed-9e19-4333-9592-7d101190f50a"
           },
           "relationships" : [ {
             "description" : "fulfillment data",
             "destinationId" : "18",
             "id" : "21",
             "properties" : {
-              "structurizr.dsl.identifier" : "399acff0-1f6f-426b-9a5d-9938be30820e"
+              "structurizr.dsl.identifier" : "50ce65ee-788a-47df-843e-712c29c1355a"
             },
             "sourceId" : "19",
             "tags" : "Relationship,sync-one-way",
@@ -377,7 +383,7 @@
             "destinationId" : "25",
             "id" : "26",
             "properties" : {
-              "structurizr.dsl.identifier" : "944819dd-3678-4cf3-810d-a519679964b1"
+              "structurizr.dsl.identifier" : "3b7784b7-70bc-413e-b64d-09ef908c9a8f"
             },
             "sourceId" : "23",
             "tags" : "Relationship,sync-one-way",
@@ -401,14 +407,14 @@
           "id" : "25",
           "name" : "E-Mail Persistence",
           "properties" : {
-            "structurizr.dsl.identifier" : "29be5374-a4ac-4a6a-8170-18006e912d5d"
+            "structurizr.dsl.identifier" : "991ec57a-485a-4264-b7a3-6262ebc3d4f7"
           },
           "relationships" : [ {
             "description" : "e-mail data",
             "destinationId" : "24",
             "id" : "27",
             "properties" : {
-              "structurizr.dsl.identifier" : "792447a1-19cb-45df-ac46-d3c552ade65b"
+              "structurizr.dsl.identifier" : "30622dd7-8951-4bda-9661-e7078f19f3af"
             },
             "sourceId" : "25",
             "tags" : "Relationship,sync-one-way",
@@ -440,7 +446,7 @@
             "destinationId" : "33",
             "id" : "34",
             "properties" : {
-              "structurizr.dsl.identifier" : "3208c541-f24a-4934-b8b6-5b2bb1f8031f"
+              "structurizr.dsl.identifier" : "60a7e4b9-bff9-4331-8f81-5e9f623ffd91"
             },
             "sourceId" : "29",
             "tags" : "Relationship,sync-one-way",
@@ -450,7 +456,7 @@
             "destinationId" : "52",
             "id" : "53",
             "properties" : {
-              "structurizr.dsl.identifier" : "c9512f8f-6c8c-4362-82bd-f4430be82a17"
+              "structurizr.dsl.identifier" : "d81b765d-24ca-4bde-998c-a8416070d289"
             },
             "sourceId" : "29",
             "tags" : "Relationship,sync-one-way",
@@ -471,7 +477,7 @@
             "destinationId" : "5",
             "id" : "35",
             "properties" : {
-              "structurizr.dsl.identifier" : "40ca6545-aace-41ca-a989-bd8e5fbfc417"
+              "structurizr.dsl.identifier" : "4a9c417b-8e7f-4ae4-81ae-521c42a395f2"
             },
             "sourceId" : "33",
             "tags" : "Relationship,sync-one-way",
@@ -488,7 +494,7 @@
             "destinationId" : "11",
             "id" : "39",
             "properties" : {
-              "structurizr.dsl.identifier" : "3d914fb9-947e-4e05-bc48-76cf69103ae5"
+              "structurizr.dsl.identifier" : "fee0222b-d7bd-4be0-b794-34f94f205348"
             },
             "sourceId" : "33",
             "tags" : "Relationship,sync-one-way",
@@ -505,7 +511,7 @@
             "destinationId" : "17",
             "id" : "43",
             "properties" : {
-              "structurizr.dsl.identifier" : "46aa6c3d-3f37-4b95-9e20-2492bb906c88"
+              "structurizr.dsl.identifier" : "6d6e480c-c8d2-4143-b270-ab2850d77cb8"
             },
             "sourceId" : "33",
             "tags" : "Relationship,sync-one-way",
@@ -522,7 +528,7 @@
             "destinationId" : "23",
             "id" : "47",
             "properties" : {
-              "structurizr.dsl.identifier" : "f1dfe66c-cb08-4b8c-9253-108c11fddf99"
+              "structurizr.dsl.identifier" : "e976925f-15d7-4c33-b743-7cee15030d39"
             },
             "sourceId" : "33",
             "tags" : "Relationship,sync-one-way",
@@ -553,14 +559,14 @@
           "id" : "52",
           "name" : "Orchestrator Persistence",
           "properties" : {
-            "structurizr.dsl.identifier" : "4656ee7a-5638-4941-9014-def374518518"
+            "structurizr.dsl.identifier" : "26d0590c-2fbc-4280-a4db-f2c7da88150f"
           },
           "relationships" : [ {
             "description" : "orchestration data",
             "destinationId" : "51",
             "id" : "54",
             "properties" : {
-              "structurizr.dsl.identifier" : "33b0df06-5992-42a0-b55a-1ef557bbfa1a"
+              "structurizr.dsl.identifier" : "d330dff5-f4a7-4db9-82c7-f04c8f88f62e"
             },
             "sourceId" : "52",
             "tags" : "Relationship,sync-one-way",
@@ -654,7 +660,7 @@
   "views" : {
     "componentViews" : [ {
       "automaticLayout" : {
-        "applied" : true,
+        "applied" : false,
         "edgeSeparation" : 0,
         "implementation" : "Graphviz",
         "nodeSeparation" : 300,
@@ -663,26 +669,22 @@
         "vertices" : false
       },
       "containerId" : "22",
-      "dimensions" : {
-        "height" : 2591,
-        "width" : 890
-      },
       "elements" : [ {
         "id" : "23",
-        "x" : 220,
-        "y" : 800
+        "x" : 0,
+        "y" : 0
       }, {
         "id" : "24",
-        "x" : 220,
-        "y" : 2000
+        "x" : 0,
+        "y" : 0
       }, {
         "id" : "25",
-        "x" : 220,
-        "y" : 1400
+        "x" : 0,
+        "y" : 0
       }, {
         "id" : "28",
-        "x" : 220,
-        "y" : 200
+        "x" : 0,
+        "y" : 0
       } ],
       "externalContainerBoundariesVisible" : false,
       "generatedKey" : true,
@@ -697,7 +699,7 @@
       } ]
     }, {
       "automaticLayout" : {
-        "applied" : true,
+        "applied" : false,
         "edgeSeparation" : 0,
         "implementation" : "Graphviz",
         "nodeSeparation" : 300,
@@ -706,26 +708,22 @@
         "vertices" : false
       },
       "containerId" : "16",
-      "dimensions" : {
-        "height" : 2591,
-        "width" : 907
-      },
       "elements" : [ {
         "id" : "17",
-        "x" : 228,
-        "y" : 800
+        "x" : 0,
+        "y" : 0
       }, {
         "id" : "18",
-        "x" : 228,
-        "y" : 2000
+        "x" : 0,
+        "y" : 0
       }, {
         "id" : "19",
-        "x" : 228,
-        "y" : 1400
+        "x" : 0,
+        "y" : 0
       }, {
         "id" : "28",
-        "x" : 228,
-        "y" : 200
+        "x" : 0,
+        "y" : 0
       } ],
       "externalContainerBoundariesVisible" : false,
       "generatedKey" : true,
@@ -740,7 +738,7 @@
       } ]
     }, {
       "automaticLayout" : {
-        "applied" : true,
+        "applied" : false,
         "edgeSeparation" : 0,
         "implementation" : "Graphviz",
         "nodeSeparation" : 300,
@@ -749,46 +747,42 @@
         "vertices" : false
       },
       "containerId" : "28",
-      "dimensions" : {
-        "height" : 2591,
-        "width" : 4528
-      },
       "elements" : [ {
         "id" : "1",
-        "x" : 595,
-        "y" : 200
+        "x" : 0,
+        "y" : 0
       }, {
         "id" : "4",
-        "x" : 1628,
-        "y" : 2000
+        "x" : 0,
+        "y" : 0
       }, {
         "id" : "10",
-        "x" : 2378,
-        "y" : 2000
+        "x" : 0,
+        "y" : 0
       }, {
         "id" : "16",
-        "x" : 3128,
-        "y" : 2000
+        "x" : 0,
+        "y" : 0
       }, {
         "id" : "22",
-        "x" : 3878,
-        "y" : 2000
+        "x" : 0,
+        "y" : 0
       }, {
         "id" : "29",
-        "x" : 595,
-        "y" : 800
+        "x" : 0,
+        "y" : 0
       }, {
         "id" : "33",
-        "x" : 970,
-        "y" : 1400
+        "x" : 0,
+        "y" : 0
       }, {
         "id" : "51",
-        "x" : 220,
-        "y" : 2000
+        "x" : 0,
+        "y" : 0
       }, {
         "id" : "52",
-        "x" : 220,
-        "y" : 1400
+        "x" : 0,
+        "y" : 0
       } ],
       "externalContainerBoundariesVisible" : false,
       "generatedKey" : true,
@@ -803,17 +797,9 @@
       }, {
         "id" : "40"
       }, {
-        "id" : "44",
-        "vertices" : [ {
-          "x" : 2978,
-          "y" : 2000
-        } ]
+        "id" : "44"
       }, {
-        "id" : "48",
-        "vertices" : [ {
-          "x" : 3728,
-          "y" : 2000
-        } ]
+        "id" : "48"
       }, {
         "id" : "53"
       }, {
@@ -821,7 +807,7 @@
       } ]
     }, {
       "automaticLayout" : {
-        "applied" : true,
+        "applied" : false,
         "edgeSeparation" : 0,
         "implementation" : "Graphviz",
         "nodeSeparation" : 300,
@@ -830,26 +816,22 @@
         "vertices" : false
       },
       "containerId" : "4",
-      "dimensions" : {
-        "height" : 2591,
-        "width" : 994
-      },
       "elements" : [ {
         "id" : "5",
-        "x" : 272,
-        "y" : 800
+        "x" : 0,
+        "y" : 0
       }, {
         "id" : "6",
-        "x" : 272,
-        "y" : 2000
+        "x" : 0,
+        "y" : 0
       }, {
         "id" : "7",
-        "x" : 272,
-        "y" : 1400
+        "x" : 0,
+        "y" : 0
       }, {
         "id" : "28",
-        "x" : 272,
-        "y" : 200
+        "x" : 0,
+        "y" : 0
       } ],
       "externalContainerBoundariesVisible" : false,
       "generatedKey" : true,
@@ -864,7 +846,7 @@
       } ]
     }, {
       "automaticLayout" : {
-        "applied" : true,
+        "applied" : false,
         "edgeSeparation" : 0,
         "implementation" : "Graphviz",
         "nodeSeparation" : 300,
@@ -873,26 +855,22 @@
         "vertices" : false
       },
       "containerId" : "10",
-      "dimensions" : {
-        "height" : 2591,
-        "width" : 890
-      },
       "elements" : [ {
         "id" : "11",
-        "x" : 220,
-        "y" : 800
+        "x" : 0,
+        "y" : 0
       }, {
         "id" : "12",
-        "x" : 220,
-        "y" : 2000
+        "x" : 0,
+        "y" : 0
       }, {
         "id" : "13",
-        "x" : 220,
-        "y" : 1400
+        "x" : 0,
+        "y" : 0
       }, {
         "id" : "28",
-        "x" : 220,
-        "y" : 200
+        "x" : 0,
+        "y" : 0
       } ],
       "externalContainerBoundariesVisible" : false,
       "generatedKey" : true,
@@ -909,7 +887,6 @@
     "configuration" : {
       "branding" : { },
       "lastSavedView" : "Component-003",
-      "metadataSymbols" : "SquareBrackets",
       "styles" : {
         "elements" : [ {
           "background" : "#e8a87c",
@@ -976,7 +953,7 @@
     },
     "containerViews" : [ {
       "automaticLayout" : {
-        "applied" : true,
+        "applied" : false,
         "edgeSeparation" : 0,
         "implementation" : "Graphviz",
         "nodeSeparation" : 300,
@@ -984,34 +961,30 @@
         "rankSeparation" : 300,
         "vertices" : false
       },
-      "dimensions" : {
-        "height" : 1991,
-        "width" : 3140
-      },
       "elements" : [ {
         "id" : "1",
-        "x" : 1345,
-        "y" : 199
+        "x" : 0,
+        "y" : 0
       }, {
         "id" : "4",
-        "x" : 2470,
-        "y" : 1399
+        "x" : 0,
+        "y" : 0
       }, {
         "id" : "10",
-        "x" : 220,
-        "y" : 1399
+        "x" : 0,
+        "y" : 0
       }, {
         "id" : "16",
-        "x" : 970,
-        "y" : 1399
+        "x" : 0,
+        "y" : 0
       }, {
         "id" : "22",
-        "x" : 1720,
-        "y" : 1399
+        "x" : 0,
+        "y" : 0
       }, {
         "id" : "28",
-        "x" : 1345,
-        "y" : 799
+        "x" : 0,
+        "y" : 0
       } ],
       "externalSoftwareSystemBoundariesVisible" : false,
       "generatedKey" : true,

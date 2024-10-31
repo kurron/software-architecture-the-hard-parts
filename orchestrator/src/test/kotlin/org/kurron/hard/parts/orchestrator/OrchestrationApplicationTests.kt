@@ -1,4 +1,4 @@
-package org.kurron.hard.parts.payment
+package org.kurron.hard.parts.orchestrator
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
