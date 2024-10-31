@@ -26,46 +26,12 @@ workspace "Software Architecture: The Hard Parts (Epic Saga)" "Epic Saga" {
         penny = Person "Penny" {
             description "Purchasing customer"
         }
+        softwareSystem "Buy Less" {
+            description "Another system"
+        }
         buymore = softwareSystem "Buy More" {
             description "Online Buy More storefront"
             perspectives {
-            }
-            database = container "Database" {
-                description "Shared persistence"
-                technology "PostgreSQL"
-                tags "tag"
-                perspectives {
-                }
-                orderPlacementSchema = component "Order Placement Schema" {
-                    description "Order state"
-                    technology "PostgreSQL"
-                    perspectives {
-                    }
-                }
-                paymentSchema = component "Payment Schema" {
-                    description "Payment state"
-                    technology "PostgreSQL"
-                    perspectives {
-                    }
-                }
-                fulfillmentSchema = component "Fulfillment Schema" {
-                    description "Fulfillment state"
-                    technology "PostgreSQL"
-                    perspectives {
-                    }
-                }
-                emailSchema = component "E-mail Schema" {
-                    description "E-mail state"
-                    technology "PostgreSQL"
-                    perspectives {
-                    }
-                }
-                orchestrationSchema = component "Orchestration Schema" {
-                    description "Orchestration state"
-                    technology "PostgreSQL"
-                    perspectives {
-                    }
-                }
             }
             orderPlacementService = container "Order Placement Service" {
                 description "Accepts orders"
@@ -76,6 +42,12 @@ workspace "Software Architecture: The Hard Parts (Epic Saga)" "Epic Saga" {
                 orderPlacementAPI = component "Order Placement API" {
                     description "Service API"
                     technology "Spring HATEOAS"
+                    perspectives {
+                    }
+                }
+                orderPlacementSchema = component "Order Placement Schema" {
+                    description "Order state"
+                    technology "PostgreSQL"
                     perspectives {
                     }
                 }
@@ -102,6 +74,12 @@ workspace "Software Architecture: The Hard Parts (Epic Saga)" "Epic Saga" {
                     perspectives {
                     }
                 }
+                paymentSchema = component "Payment Schema" {
+                    description "Payment state"
+                    technology "PostgreSQL"
+                    perspectives {
+                    }
+                }
                 component "Payment Persistence" {
                     description "Persist Service State"
                     technology "Spring Data JDBC"
@@ -125,6 +103,12 @@ workspace "Software Architecture: The Hard Parts (Epic Saga)" "Epic Saga" {
                     perspectives {
                     }
                 }
+                fulfillmentSchema = component "Fulfillment Schema" {
+                    description "Fulfillment state"
+                    technology "PostgreSQL"
+                    perspectives {
+                    }
+                }
                 component "Fulfillment Persistence" {
                     description "Persist Service State"
                     technology "Spring Data JDBC"
@@ -145,6 +129,12 @@ workspace "Software Architecture: The Hard Parts (Epic Saga)" "Epic Saga" {
                 emailAPI = component "E-Mail API" {
                     description "Service API"
                     technology "Spring HATEOAS"
+                    perspectives {
+                    }
+                }
+                emailSchema = component "E-mail Schema" {
+                    description "E-mail state"
+                    technology "PostgreSQL"
                     perspectives {
                     }
                 }
@@ -187,6 +177,12 @@ workspace "Software Architecture: The Hard Parts (Epic Saga)" "Epic Saga" {
                     this -> fulfillmentAPI "ship the order" "JSON over HTTPS" "sync-one-way" {
                     }
                     this -> emailAPI "send the order status" "JSON over HTTPS" "sync-one-way" {
+                    }
+                }
+                orchestrationSchema = component "Orchestration Schema" {
+                    description "Orchestration state"
+                    technology "PostgreSQL"
+                    perspectives {
                     }
                 }
                 component "Orchestrator Persistence" {
@@ -267,6 +263,29 @@ workspace "Software Architecture: The Hard Parts (Epic Saga)" "Epic Saga" {
                 color #F64C72
             }
         }
-
+/*
+        # from misconception talk
+        container buymore {
+            include ->database->
+        }
+        container buymore {
+            include ->orderPlacementService->
+        }
+        container buymore {
+            include ->paymentService->
+        }
+        container buymore {
+            include ->fulfillmentService->
+        }
+        container buymore {
+            include ->emailService->
+        }
+        container buymore {
+            include ->orchestrator->
+        }
+       container buymore {
+           include orderPlacementService emailService
+       }
+*/
     }
 }
