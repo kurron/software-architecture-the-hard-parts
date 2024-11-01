@@ -16,10 +16,12 @@ class PaymentTestcontainersConfiguration {
 		return PostgreSQLContainer(DockerImageName.parse("postgres:latest"))
 	}
 
+/*
 	@Bean
 	@ServiceConnection
 	fun pulsarContainer(): PulsarContainer {
 		return PulsarContainer(DockerImageName.parse("apachepulsar/pulsar:latest"))
 	}
+*/
 
 }
