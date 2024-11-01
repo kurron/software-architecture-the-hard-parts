@@ -7,9 +7,15 @@ services:
       - 'POSTGRES_USER=myuser'
     ports:
       - '5432'
-  pulsar:
-    image: 'apachepulsar/pulsar:latest'
-    ports:
-      - '6650'
-      - '8080'
-    command: 'bin/pulsar standalone'
+#  pulsar:
+#    image: 'apachepulsar/pulsar:latest'
+#    ports:
+#      - '6650'
+#      - '8080'
+#    command: 'bin/pulsar standalone'
+#  pulsar:
+#    image: 'apachepulsar/pulsar:latest'
+#    ports:
+#      - '6650'
+#      - '8080'
+#    command: 'bin/pulsar standalone'
