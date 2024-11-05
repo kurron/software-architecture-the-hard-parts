@@ -23,9 +23,9 @@ Ability: Purchase Item
     |payment        |
 
   Scenario: Purchase An Item (retry failed purchase)
-  Penny wants to purchase an item but gets a message stating that there was a problem and that she should try again. When she submits the shopping cart for a second time, the system should successfully complete the transaction.
+  Penny wants to purchase an item but gets a message stating that there was a problem and that she should try again. When she submits the shopping cart for a second time, the system should successfully complete the transaction, resuming from the failed step in the workflow.
 
     Given a fully available system
     When Penny attempts to purchase a previously failed item
-    Then then the entire transaction is completed
+    Then the workflow resumes from the failed step
 
